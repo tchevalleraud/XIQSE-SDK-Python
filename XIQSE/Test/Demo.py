@@ -1,2 +1,2 @@
-def demo():
-    print("Demo")
+def message(msg="Hello World !"):
+    print("XIQSE.Test.Demo : " + msg)

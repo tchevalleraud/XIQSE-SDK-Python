@@ -1,6 +1,7 @@
 import re
 import time
 
+from XIQSE.Test.Demo import message
 from XIQSE.Utils.CLI import test
 
 class CLI(object):
@@ -25,4 +26,4 @@ class CLI(object):
             exitError(resultObj.getError())
     
     def test(self):
-        test()
+        message()
