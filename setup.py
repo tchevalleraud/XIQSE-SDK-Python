@@ -18,5 +18,8 @@ setup(
     author="Thibault CHEVALLERAUD",
     author_email="tchevalleraud@extremenetworks.com",
     packages=find_packages(exclude=["test", "tests"]),
-    include_package_data=True
+    classifiers=[
+        "Programming Language :: Python :: 2.7",
+        "Operating System :: OS Independent"
+    ]
 )

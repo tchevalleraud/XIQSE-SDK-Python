@@ -6,6 +6,16 @@ ExtremeCloudIQ Site Engine SDK Python
 
 ### pip install
 
+#### Prepare ExtremeCloudIQ Site Engine
+
 ```bash
-pip install git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+python2.7 get-pip.py
+```
+
+```bash
+```
+
+```bash
+python2.7 -m pip install git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
 ```
