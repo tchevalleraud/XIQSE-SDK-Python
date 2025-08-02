@@ -1,4 +1,5 @@
 from CLI import CLI
+from XIQSE import Utils
 
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None):
