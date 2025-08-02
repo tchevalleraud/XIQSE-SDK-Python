@@ -1,4 +1,5 @@
 from CLI import CLI
+from OS import OS
 
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None):
@@ -7,6 +8,4 @@ class XIQSE(object):
         self.emc_vars       = emc_vars
 
         self.CLI = CLI(self)
-    
-    def test(self, msg="test"):
-        print("Message : " + msg)
+        self.OS = OS(self)
