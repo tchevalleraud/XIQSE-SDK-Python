@@ -1,7 +1,7 @@
 import re
 import time
 
-from XIQSE.Test.Demo import message
+from XIQSE.Utils.CLIUtils import abortError, exitError, cliError, cleanOutput
 
 class CLI(object):
     def __init__(self, context):
@@ -23,6 +23,3 @@ class CLI(object):
             return outputStr
         else:
             exitError(resultObj.getError())
-    
-    def test(self):
-        message()
