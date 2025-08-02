@@ -1,7 +1,7 @@
 import re
 import time
 
-from XIQSE.Utils.CLIUtils import abortError, exitError, cliError, cleanOutput
+from XIQSE.Utils.CLIUtils import test
 
 class CLI(object):
     def __init__(self, context):
