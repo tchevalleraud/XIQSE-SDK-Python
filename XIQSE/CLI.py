@@ -1,7 +1,7 @@
 import re
 import time
 
-from XIQSE.Utils.CLIUtils import test
+from XIQSE.Test import testMessage
 
 class CLI(object):
     def __init__(self, context):
