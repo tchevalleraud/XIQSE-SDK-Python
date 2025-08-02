@@ -5,3 +5,6 @@ class XIQSE(object):
         self.emc_cli = emc_cli
 
         self.CLI = CLI(self)
+    
+    def test(self, msg="test"):
+        print("Message : " + msg)
