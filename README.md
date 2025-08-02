@@ -24,3 +24,15 @@ python2.7 -m pip install git+https://github.com/tchevalleraud/XIQSE-SDK-Python.g
 ```bash
 python2.7 -m pip install --upgrade --no-cache-dir git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
 ```
+
+#### Python pip list
+
+```bash
+python2.7 -m pip list
+```
+
+#### Uninstall Python package 
+
+```bash
+python2.7 -m pip uninstall XIQSE
+```

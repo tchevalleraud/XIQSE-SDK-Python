@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-NAME = "xiqse"
+NAME = "XIQSE"
 VERSION = "25.0.0-1"
 
 REQUIRES = [
