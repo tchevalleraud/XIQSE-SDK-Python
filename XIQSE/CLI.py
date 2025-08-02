@@ -4,6 +4,6 @@ class CLI(object):
 
     def send(cmd, returnCliError=False, msgOnError=None, WaitForPrompt=True):
         self.ctx.emc_cli.send(cmd, waitFormPrompt)
-        
-    def test():
+
+    def test(self):
         print("Ceci est un test depuis XIQSE.CLI !")
