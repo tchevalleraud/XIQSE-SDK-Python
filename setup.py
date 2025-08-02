@@ -11,7 +11,7 @@ REQUIRES = [
     "urllib3 ~= 1.26.7",
 ]
 
-SETUP(
+setup(
     name=NAME,
     version=VERSION,
     description="ExtremeClouqIQ Site Engine",
