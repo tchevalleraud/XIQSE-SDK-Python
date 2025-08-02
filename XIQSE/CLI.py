@@ -2,7 +2,7 @@ class CLI(object):
     def __init__(self, context):
         self.ctx = context
 
-    def send(cmd, returnCliError=False, msgOnError=None, WaitForPrompt=True):
+    def send(self, cmd, returnCliError=False, msgOnError=None, WaitForPrompt=True):
         self.ctx.emc_cli.send(cmd, waitFormPrompt)
 
     def test(self):
