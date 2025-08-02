@@ -1,3 +1,6 @@
+import re
+import time
+
 RegexPrompt = re.compile('.*[\?\$%#>]\s?$')
 RegexError  = re.compile(
     '^%|\x07|error|invalid|cannot|unable|bad|not found|not exist|not allowed|no such|out of range|incomplete|failed|denied|can\'t|ambiguous|do not|unrecognized',

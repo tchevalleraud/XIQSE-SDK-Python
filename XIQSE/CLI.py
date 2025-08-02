@@ -1,6 +1,3 @@
-import re
-import time
-
 from XIQSE.Utils.CLIUtils import abortError, exitError, cliError, cleanOutput
 
 class CLI(object):
