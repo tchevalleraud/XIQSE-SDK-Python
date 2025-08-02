@@ -30,8 +30,8 @@ class CLI(object):
         global LastError
         resultObj = self.ctx.emc_cli.send(cmd, waitForPrompt)
         if resultObj.isSuccess():
-            outputStr = cleanOutput(resultObj.getOutput())
+            outputStr = self.cleanOutput(resultObj.getOutput())
             LastError = None
             return outputStr
         else:
-            exitError(resultObj.getError())
+            self.exitError(resultObj.getError())
