@@ -16,7 +16,7 @@ rm -rf /tmp/xiqse_tmp
 from XIQSE import XIQSE
 
 XIQSE = XIQSE(emc_cli, emc_results, emc_vars)
-XIQSE.CLI.send("enable")
+XIQSE.CLI.sendCommand("enable")
 XIQSE.test("toto")
 
 emc_results.setStatus(emc_results.Status.SUCCESS)
