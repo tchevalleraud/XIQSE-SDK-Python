@@ -10,35 +10,14 @@ cp -r /tmp/xiqse_tmp/XIQSE /usr/local/Extreme_Networks/NetSight/jython/Lib/ && \
 rm -rf /tmp/xiqse_tmp
 ```
 
-### pip install (OLD)
+## Example
 
-#### Prepare ExtremeCloudIQ Site Engine
+```python
+from XIQSE import XIQSE
 
-```bash
-curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
-python2.7 get-pip.py
-```
+XIQSE = XIQSE(emc_cli, emc_results, emc_vars)
+XIQSE.CLI.send("enable")
+XIQSE.test("toto")
 
-#### Install Python package
-
-```bash
-python2.7 -m pip install git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
-```
-
-#### Upgrade Python package
-
-```bash
-python2.7 -m pip install --upgrade --no-cache-dir git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
-```
-
-#### Python pip list
-
-```bash
-python2.7 -m pip list
-```
-
-#### Uninstall Python package 
-
-```bash
-python2.7 -m pip uninstall XIQSE
+emc_results.setStatus(emc_results.Status.SUCCESS)
 ```
