@@ -10,7 +10,7 @@ class CLI(object):
     def cleanOutput(self, outputStr):
         if re.match(r'Error:', outputStr):
             return outputStr
-        outputLines = outputStr.splitLines()
+        outputLines = outputStr.splitlines()
         lastLine = outputLines[-1]
         if RegexPrompt.match(lastLine):
             return '\n'.join(outputLines[1:-1])
