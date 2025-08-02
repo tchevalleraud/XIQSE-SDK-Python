@@ -17,7 +17,7 @@ setup(
     description="ExtremeClouqIQ Site Engine",
     author="Thibault CHEVALLERAUD",
     author_email="tchevalleraud@extremenetworks.com",
-    packages=find_packages(),
+    packages=find_packages(include=["XIQSE", "XIQSE.*"]),
     classifiers=[
         "Programming Language :: Python :: 2.7",
         "Operating System :: OS Independent"
