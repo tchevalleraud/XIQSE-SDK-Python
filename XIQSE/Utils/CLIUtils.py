@@ -47,6 +47,3 @@ def exitError(errorOutput, sleep=10):
         self.ctx.emc_results.put("workflowMessage", errorOutput)
     self.ctx.emc_results.setStatus(self.ctx.Status.ERROR)
     raise RuntimeError(errorOutput)
-
-def test():
-    print("Ceci est un test")
