@@ -23,3 +23,6 @@ class CLI(object):
             return outputStr
         else:
             exitError(resultObj.getError())
+    
+    def test(self):
+        print("test")
