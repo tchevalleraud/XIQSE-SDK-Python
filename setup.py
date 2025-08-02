@@ -17,7 +17,7 @@ setup(
     description="ExtremeClouqIQ Site Engine",
     author="Thibault CHEVALLERAUD",
     author_email="tchevalleraud@extremenetworks.com",
-    packages=find_packages(exclude=["test", "tests"]),
+    packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 2.7",
         "Operating System :: OS Independent"

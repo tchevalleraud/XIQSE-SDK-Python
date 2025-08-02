@@ -13,9 +13,14 @@ curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python2.7 get-pip.py
 ```
 
-```bash
-```
+#### Install Python package
 
 ```bash
 python2.7 -m pip install git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
+```
+
+#### Upgrade Python package
+
+```bash
+python2.7 -m pip install --upgrade --no-cache-dir git+https://github.com/tchevalleraud/XIQSE-SDK-Python.git
 ```

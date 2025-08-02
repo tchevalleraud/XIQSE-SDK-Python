@@ -1,3 +1,0 @@
-"""
-    ExtremeCloudIQ Site Engine SDK
-"""
