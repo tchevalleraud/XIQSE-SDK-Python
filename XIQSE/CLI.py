@@ -12,7 +12,7 @@ class CLI(object):
             return outputStr
         outputLines = outputStr.splitlines()
         lastLine = outputLines[-1]
-        if RegexPrompt.match(lastLine):
+        if self.RegexPrompt.match(lastLine):
             return '\n'.join(outputLines[1:-1])
         else:
             return '\n'.join(outputLines[1:])
