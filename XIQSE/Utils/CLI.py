@@ -28,13 +28,13 @@ def cleanOutput(outputStr):
         return outputStr
     outputLines = outputStr.splitlines()
     lastLine = outputLines[-1]
-    if self.RegexPrompt.match(lastLine):
+    if RegexPrompt.match(lastLine):
         return '\n'.join(outputLines[1:-1])
     else:
         return '\n'.join(outputLines[1:])
 
 def cliError(outputStr):
-    if not self.RegexNoError.search(outputStr) and self.RegexError.search(outputStr):
+    if not RegexNoError.search(outputStr) and RegexError.search(outputStr):
         return True
     else:
         return False
