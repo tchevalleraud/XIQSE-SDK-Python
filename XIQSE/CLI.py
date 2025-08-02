@@ -25,4 +25,4 @@ class CLI(object):
             exitError(resultObj.getError())
     
     def test(self):
-        print("test")
+        testMessage("hello world !")
