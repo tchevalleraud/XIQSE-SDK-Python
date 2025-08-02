@@ -4,7 +4,13 @@ ExtremeCloudIQ Site Engine SDK Python
 
 ## Installation & Usage
 
-### pip install
+```bash
+git clone https://github.com/tchevalleraud/XIQSE-SDK-Python.git /tmp/xiqse_tmp && \
+cp -r /tmp/xiqse_tmp/XIQSE /usr/local/Extreme_Networks/NetSight/jython/Lib/ && \
+rm -rf /tmp/xiqse_tmp
+```
+
+### pip install (OLD)
 
 #### Prepare ExtremeCloudIQ Site Engine
 
