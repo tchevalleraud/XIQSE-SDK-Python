@@ -1,6 +1,8 @@
-from CLI import CLI
-from OS import OS
 from Utils import setFamily
+
+from CLI import CLI
+from GraphQL import GraphQL
+from OS import OS
 
 import re
 
