@@ -24,7 +24,7 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def getFamily(self):
-        return self.Family
+        return Family
     
     def log(self, logOutput):
         if self.Log:
