@@ -11,7 +11,7 @@ class OS(object):
     def execute(self, cmd, output=True):
         try:
             self.ctx.debug("XIQSE.OS.execute command : {}".format(cmd))
-            outputStr = subprocess.check_output(cmd)
+            outputStr = subprocess.check_output(cmd, shell=True)
             self.ctx.debug("XIQSE.OS.execute result : {}".format(outputStr))
             return outputStr
         except Exception as e:
