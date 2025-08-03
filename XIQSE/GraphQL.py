@@ -19,7 +19,6 @@ class GraphQL(object):
             NbiAuth = None
     
     def nbiQuery(jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
-        testGraphQL()
         jsonQuery = replaceKwargs(jsonQueryDict['json'], kwargs)
         #returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         #self.ctx.debug("NBI Query:\n{}\n".format(jsonQuery))
