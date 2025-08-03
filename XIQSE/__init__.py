@@ -20,4 +20,4 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def version(self):
-        print("[DEBUG] Version")
+        print("[DEBUG] Version : {}".format(self.Version))
