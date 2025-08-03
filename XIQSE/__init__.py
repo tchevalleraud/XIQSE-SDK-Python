@@ -4,8 +4,9 @@ from OS import OS
 import re
 
 class XIQSE(object):
-    def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False):
+    def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
         self.Debug      = Debug
+        self.Log        = Log
         self.Version    = "25.8.0-1"
 
         self.emc_cli        = emc_cli
@@ -18,6 +19,10 @@ class XIQSE(object):
     def debug(self, debugOutput):
         if self.Debug:
             print("[DEBUG] {}".format(debugOutput))
+    
+    def log(self, logOutput):
+        if self.Log:
+            print("[LOG] {}".format(logOutput))
     
     def scriptName(self):
         name = None
