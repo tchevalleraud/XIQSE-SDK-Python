@@ -1,7 +1,7 @@
 import re
 
 def debug(debugOutput):
-    if Debug:
+    if self.Debug:
         print debugOutput
 
 def parseRegexInput(cmdRegexStr):
