@@ -15,7 +15,7 @@ class CLI(object):
         cmdStore = re.sub(r'\n.+$', '', cmd, flags=re.DOTALL)
 
         if self.ctx.sanity:
-            self.ctx.log("SANITY > {}".format(cmd)))
+            self.ctx.log("SANITY > {}".format(cmd))
             self.ConfigHistory.append(cmdStore)
             LastError = None
             return True
