@@ -1,11 +1,20 @@
 import re
+import sys, os
 
 class CLI(object):
 
-    ConfigHistory = []
+    CommandHistory = []
 
     def __init__(self, context):
         self.ctx = context
+    
+    def sendCommandTest1(self, cmd):
+        _ = self.ctx.emc_cli.send(cmd)
+    
+    def sendCommandTest2(self, cmd):
+        sys.stdout = open(os.devnull, 'w')
+        self.ctx.emc_cli.send(cmd)
+        sys.stdout = sys.__stdout__
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
@@ -16,7 +25,7 @@ class CLI(object):
 
         if self.ctx.sanity:
             self.ctx.log("SANITY > {}".format(cmd))
-            self.ConfigHistory.append(cmdStore)
+            self.CommandHistory.append(cmdStore)
             LastError = None
             return True
         else:
@@ -30,7 +39,7 @@ class CLI(object):
                             self.ctx.log("Ignoring above error: {}".format(msgOnError))
                         return False
                     self.ctx.abortError(cmd, outputStr)
-                self.ConfigHistory.append(cmdStore)
+                self.CommandHistory.append(cmdStore)
                 LastError = None
                 return True
             else:
