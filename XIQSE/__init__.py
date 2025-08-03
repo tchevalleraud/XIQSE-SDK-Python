@@ -22,6 +22,7 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def getFamily(self):
+        print("getFamily")
         try:
             return setFamily(None, self.emc_vars)
         except Exception as e:
