@@ -5,6 +5,7 @@ import re
 class CLI(object):
 
     CommandHistory = []
+    Indent = 3
 
     def __init__(self, context):
         self.ctx = context
@@ -24,12 +25,12 @@ class CLI(object):
                 if level < maxLevel and RegexContextPatterns[Family][level].match(cmd):
                     print "-> {}{}".format(indent, cmd)
                     level += 1
-                    indent = ' ' * Indent * level
+                    indent = ' ' * self.Indent * level
                     continue
                 elif RegexExitInstance.match(cmd):
                     if level > 0:
                         level -= 1
-                    indent = ' ' * Indent * level
+                    indent = ' ' * self.Indent * level
             print "-> {}{}".format(indent, cmd)
         self.CommandHistory = []
 
