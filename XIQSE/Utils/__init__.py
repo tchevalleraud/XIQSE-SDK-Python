@@ -24,6 +24,10 @@ def setFamily(family=None, emc_vars=None):
     Family = None
     if family:
         Family = family
+    elif emc_vars["family"] in FamilyChildren:
+        Family = FamilyChildren[emc_vars["family"]]
+    elif emc_vars["deviceType"] in FamilyChildren:
+        Family = FamilyChildren[emc_vars["deviceType"]]
     else:
         Family = "Unknown"
     return Family
