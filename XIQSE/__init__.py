@@ -49,7 +49,7 @@ class XIQSE(object):
     def debug(self, msg, *args):
         self.logger.debug(msg, *args)
     
-    def error(self, msg, *args)
+    def error(self, msg, *args):
         self.logger.error(msg, *args)
     
     def exitError(self, errorOutput, sleep=10):
