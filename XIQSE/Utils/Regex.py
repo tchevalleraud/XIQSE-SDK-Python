@@ -30,3 +30,4 @@ RegexContextPatterns = {
         re.compile('^ *(?:ringv2-group |interface )'),
     ],
 }
+RegexExitInstance = re.compile('^ *(?:exit|back|end|config|save)(?:\s|$)')
