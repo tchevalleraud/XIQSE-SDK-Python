@@ -8,7 +8,7 @@ from OS import OS
 import re
 
 class XIQSE(object):
-    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
+    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, Debug=False, Log=True, Sanity=False):
         self.Debug      = Debug
         self.Family     = setFamily(None, emc_vars)
         self.Log        = Log
