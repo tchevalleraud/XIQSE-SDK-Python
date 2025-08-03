@@ -8,8 +8,9 @@ from Utils.Regex import RegexError, RegexNoError, RegexPrompt
 import re
 
 class XIQSE(object):
-    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, debug=False):
+    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, debug=False, sanity=False):
         self.debug  = debug
+        self.sanity = sanity
 
         self.emc_cli        = emc_cli
         self.emc_nbi        = emc_nbi
