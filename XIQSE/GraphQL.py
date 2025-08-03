@@ -20,11 +20,21 @@ class GraphQL(object):
             self.NbiAuth = None
     
     def nbiQuery(self, jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
+        global LastNbiError
         jsonQuery = replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         self.ctx.debug("NBI Query:\n{}\n".format(jsonQuery))
         response = nbiSessionPost(jsonQuery, returnKeyError) if self.NbiUrl else self.ctx.emc_nbi.query(jsonQuery)
-    
+        self.ctx.debug("nbiQuery response = {}".format(response))
+        if response == None:
+            return None
+        if 'errors' in response:
+            if returnKeyError:
+                LastNbiError = response['errors'][0].message
+                return None
+            abortError("nbiQuery for\n{}".format(jsonQuery), response['errors'][0].message)
+        LastNbiError = None
+
     def nbiSessionPost(jsonQuery, returnKeyError=False):
         global LastNbiError
         session         = requests.Session()
