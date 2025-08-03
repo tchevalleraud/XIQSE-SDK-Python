@@ -71,19 +71,3 @@ def main():
     
 main()
 ```
-
-### Script Exemple
-
-### Move to OOB Mgmt IP
-
-```python
-from XIQSE import XIQSE
-
-__version__ = '1.0'
-Debug       = True
-Log         = True
-Sanity      = True
-
-XIQSE = XIQSE(emc_cli, emc_nbi, emc_results, emc_vars, Debug, Log, Sanity)
-XIQSE.log("Workflow {} version {} on XIQ-SE version {}".format(XIQSE.scriptName(), __version__, "0.0"))
-```
