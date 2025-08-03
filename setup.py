@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages
 
 NAME = "XIQSE"
-VERSION = "25.0.0-1"
+VERSION = "25.8.0-1"
 
 REQUIRES = [
     "urllib3 ~= 1.26.7",

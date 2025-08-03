@@ -3,7 +3,8 @@ from OS import OS
 
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False):
-        self.Debug = Debug
+        self.Debug      = Debug
+        self.Version    = "25.8.0-1"
 
         self.emc_cli        = emc_cli
         self.emc_results    = emc_results
@@ -17,3 +18,6 @@ class XIQSE(object):
     def debug(self, debugOutput):
         if self.Debug:
             print("[DEBUG] {}".format(debugOutput))
+    
+    def version(self)
+        print("XIQSE SDK Python version : {}".format(self.ctx.Version))
