@@ -1,3 +1,5 @@
+from java.io import PrintStream, ByteArrayOutputStream
+
 import re
 import sys, os
 
@@ -15,6 +17,14 @@ class CLI(object):
         sys.stdout = open(os.devnull, 'w')
         self.ctx.emc_cli.send(cmd)
         sys.stdout = sys.__stdout__
+    
+    def sendCommandTest3(self, cmd):
+        baos = ByteArrayOutputStream()
+        ps = PrintStream(baos)
+        System.setOut(ps)
+        self.ctx.emc_cli.send(cmd)
+        System.setOut(System.out)
+        return baos.toString()
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
