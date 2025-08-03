@@ -5,8 +5,6 @@ from Utils import setFamily
 import re
 
 class XIQSE(object):
-    Family = "Test"
-
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
         self.Debug      = Debug
         self.Log        = Log
@@ -24,7 +22,11 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def getFamily(self):
-        return Family
+        try:
+            return setFamily(None, self.emc_vars)
+        except Exception as e:
+            print "{}: {}".format(type(e).__name__, str(e))
+            return false
     
     def log(self, logOutput):
         if self.Log:
