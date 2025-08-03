@@ -11,10 +11,8 @@ class OS(object):
     def execute(self, cmd, output=True):
         try:
             outputStr = subprocess.check_output(cmd)
+            return outputStr
         except Exception as e:
             print"{}: {}".format(type(e).__name__, str(e))
             print "Error executing '{}' on XIQSE shell".format(cmd)
             return False
-        
-        print("XIQSE.OS.execute : command {}".format(cmd))
-        print(outputStr)
