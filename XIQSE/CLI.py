@@ -16,7 +16,7 @@ class CLI(object):
 
         if self.ctx.sanity:
             print "SANITY > {}".format(cmd)
-            self.ConfigHistory.append(cmdStrore)
+            self.ConfigHistory.append(cmdStore)
             LastError = None
             return True
         else:
