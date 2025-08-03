@@ -35,7 +35,7 @@ class GraphQL(object):
             abortError("nbiQuery for\n{}".format(jsonQuery), response['errors'][0].message)
         LastNbiError = None
 
-    def nbiSessionPost(jsonQuery, returnKeyError=False):
+    def nbiSessionPost(self, jsonQuery, returnKeyError=False):
         global LastNbiError
         session         = requests.Session()
         session.verify  = False
