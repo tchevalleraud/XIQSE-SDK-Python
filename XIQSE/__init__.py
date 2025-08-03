@@ -5,9 +5,10 @@ from Utils import setFamily
 import re
 
 class XIQSE(object):
+    Family = "Test"
+
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
         self.Debug      = Debug
-        self.Family     = "Test"
         self.Log        = Log
         self.Version    = "25.8.0-1"
 
