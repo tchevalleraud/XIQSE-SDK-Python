@@ -22,7 +22,7 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def getFamily(self):
-        return "getFamily"
+        return self.Version
     
     def log(self, logOutput):
         if self.Log:
