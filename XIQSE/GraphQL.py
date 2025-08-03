@@ -52,7 +52,7 @@ class GraphQL(object):
             response = session.post(self.NbiUrl, json={'operationName': None, 'query': jsonQuery, 'variables': None })
             response.raise_for_status()
         except requests.exceptions.RequestException as error:
-            if returnKeyError
+            if returnKeyError:
                 LastNbiError = error
                 return None
             abortError("nbiQuery for\n{}".format(jsonQuery), error)
