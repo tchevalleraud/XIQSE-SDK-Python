@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from CLI import CLI
 from GraphQL import GraphQL
 from OS import OS
@@ -63,6 +65,11 @@ class XIQSE(object):
     
     def log(self, msg, *args):
         self.logger.info(msg, *args)
+    
+    def printHeader(self, scriptVersion):
+        print("=" * 60)
+        print("= Workflow xxx, task xxx")
+        print("=" * 60)
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
