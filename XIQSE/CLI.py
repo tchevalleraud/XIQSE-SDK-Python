@@ -1,4 +1,4 @@
-from Utils.Regex import *
+from Utils.Regex import RegexPrompt
 
 class CLI(object):
     def __init__(self, context):
