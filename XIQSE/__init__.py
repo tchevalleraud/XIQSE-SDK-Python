@@ -73,8 +73,18 @@ class XIQSE(object):
         self.logger.info(msg, *args)
     
     def printHeader(self, scriptVersion):
-        print("=" * 60)
-        print("= Workflow {}, task {}".format(self.scriptName(), self.activityName()))
+        line_width = 80
+
+        print("=" * line_width)
+        header_text = "Workflow {}, task {}".format(self.scriptName(), self.activityName())
+        padding = line_width - len(header_text) - 6
+        if padding < 0:
+            padding = 0
+        print("== {}{} ==".format(header_text, " " * padding))
+        print("=" * line_width)
+
+
+        print("== Workflow {}, task {}".format(self.scriptName(), self.activityName()))
         print("=" * 60)
     
     def scriptName(self):
