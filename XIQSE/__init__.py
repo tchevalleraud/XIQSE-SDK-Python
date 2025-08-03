@@ -15,4 +15,5 @@ class XIQSE(object):
         self.debug("Hello world !")
     
     def debug(self, debugOutput):
-        print("[DEBUG] {}".format(debugOutput))
+        if self.Debug:
+            print("[DEBUG] {}".format(debugOutput))
