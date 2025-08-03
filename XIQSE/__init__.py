@@ -15,8 +15,9 @@ class XIQSE(object):
         self.emc_results    = emc_results
         self.emc_vars       = emc_vars
 
-        self.CLI = CLI(self)
-        self.OS = OS(self)
+        self.CLI        = CLI(self)
+        self.GraphQL    = GraphQL(self)
+        self.OS         = OS(self)
     
     def debug(self, debugOutput):
         if self.Debug:
