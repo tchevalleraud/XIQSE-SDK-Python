@@ -3,13 +3,14 @@ from GraphQL import GraphQL
 from OS import OS
 from SNMP import SNMP
 
+form Utils.Logger import Logger
 from Utils.Regex import RegexError, RegexNoError, RegexPrompt
 
 import re
 
 class XIQSE(object):
-    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, debug=False, sanity=False):
-        self.debug  = debug
+    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, log_level='INFO', sanity=False):
+        self.logger = Logger('DEBUG' if debug else log_level)
         self.sanity = sanity
 
         self.emc_cli        = emc_cli
@@ -45,7 +46,13 @@ class XIQSE(object):
         else:
             return False
     
-    def exitError(seld, errorOutput, sleep=10):
+    def debug(self, msg, *args):
+        self.logger.debug(msg, *args)
+    
+    def error(self, msg, *args)
+        self.logger.error(msg, *args)
+    
+    def exitError(self, errorOutput, sleep=10):
         if 'workflowMessage' in self.emc_vars:
             time.sleep(sleep)
             self.emc_results.put("deviceMessage", errorOutput)
@@ -55,5 +62,7 @@ class XIQSE(object):
         raise RuntimeError(errorOutput)
     
     def log(self, msg, *args):
-        if self.debug:
-            print("[LOG] " + msg.format(*args))
+        self.logger.info(msg, *args)
+    
+    def warning(self, msg, *args):
+        self.logger.warning(msg, *args)
