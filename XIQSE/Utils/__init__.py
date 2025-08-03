@@ -1,9 +1,5 @@
 import re
 
-def debug(Debug, debugOutput):
-    if Debug:
-        print debugOutput
-
 def parseRegexInput(cmdRegexStr):
     if re.match(r'\w+(?:-\w+)?://', cmdRegexStr):
         mode, cmdRegexStr = map(str.strip, cmdRegexStr.split('://', 1))
