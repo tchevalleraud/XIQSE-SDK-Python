@@ -1,3 +1,5 @@
+from Utils.Regex import *
+
 class CLI(object):
     def __init__(self, context):
         self.ctx = context
