@@ -11,7 +11,7 @@ class OS(object):
     def execute(self, cmd, output=True):
         try:
             outputStr = subprocess.check_output(cmd)
-            XIQSE.debug("XIQSE.OS.execute")
+            self.ctx.debug("XIQSE.OS.execute about to execute : {}".format(cmd))
             return outputStr
         except Exception as e:
             print"{}: {}".format(type(e).__name__, str(e))
