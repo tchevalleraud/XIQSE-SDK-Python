@@ -20,18 +20,9 @@ class CLI(object):
         sys.stdout = sys.__stdout__
     
     def sendCommandTest3(self, cmd):
-        original_out = System.out
-        baos = ByteArrayOutputStream()
-        ps = PrintStream(baos)
-        
-        try:
-            System.setOut(ps)
-            result = self.ctx.emc_cli.send(cmd)
-            System.setOut(original_out)
-            return result.getOutput() if result.isSuccess() else result.getError()
-        except Exception as e:
-            System.setOut(original_out)
-            return "ERROR: {}".format(e)
+        print(self.ctx.emc_cli.__class__)
+        print(self.ctx.emc_cli.getClass())
+        print(self.ctx.emc_cli.getClass().getName())
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
