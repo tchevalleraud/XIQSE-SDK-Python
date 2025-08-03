@@ -75,7 +75,7 @@ class XIQSE(object):
         name = None
         if 'workflowName' in self.emc_vars:
             name = self.emc_vars['workflowName']
-        else 'javax.script.filename' in self.emc_vars:
+        elif 'javax.script.filename' in self.emc_vars:
             nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
             name = nameMatch.group(1) if nameMatch else None
         return name
