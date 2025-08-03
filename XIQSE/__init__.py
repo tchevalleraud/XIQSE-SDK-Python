@@ -31,7 +31,7 @@ class XIQSE(object):
         else:
             return '\n'.join(outputLines[1:])
     
-    def cliError(outputStr):
+    def cliError(self, outputStr):
         if not RegexNoError.search(outputStr) and RegexError.search(outputStr):
             return True
         else:
