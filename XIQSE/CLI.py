@@ -8,7 +8,7 @@ class CLI(object):
         global LastError
         resultObj = self.ctx.emc_cli.send(cmd, waitForPrompt)
         if resultObj.isSuccess():
-            outputStr = cleanOutput(resultObj.getOutput())
+            outputStr = self.ctx.cleanOutput(resultObj.getOutput())
             if outputStr and cliError("\n".join(outputStr.split("\n")[:4])):
                 if returnCliError:
                     LastError = outputStr
