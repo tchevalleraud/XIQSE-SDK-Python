@@ -19,5 +19,5 @@ class XIQSE(object):
         if self.Debug:
             print("[DEBUG] {}".format(debugOutput))
     
-    def version(self)
+    def version(self):
         print("XIQSE SDK Python version : {}".format(self.Version))
