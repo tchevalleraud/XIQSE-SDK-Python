@@ -35,6 +35,22 @@ class GraphQL(object):
             abortError("nbiQuery for\n{}".format(jsonQuery), response['errors'][0].message)
         LastNbiError = None
 
+        if returnKey:
+            foundKey, returnValue = recursionKeySearch(response, returnKey)
+            if foundKey:
+                if Debug:
+                    if debugKey: debug("{} = {}".format(debugKey, returnValue))
+                    else: debug("nbiQuery {} = {}".format(returnKey, returnValue))
+                return returnValue
+            if returnKeyError:
+                return None
+            abortError("nbiQuery for\n{}".format(jsonQuery), 'Key "{}" was not found in query response'.format(returnKey))
+        
+        if Debug:
+            if debugKey: debug("{} = {}".format(debugKey, response))
+            else: debug("nbiQuery response = {}".format(response))
+        return response
+
     def nbiSessionPost(self, jsonQuery, returnKeyError=False):
         global LastNbiError
         session         = requests.Session()
