@@ -29,4 +29,4 @@ class XIQSE(object):
         return name
     
     def version(self):
-        print("[DEBUG] Version : {}".format(self.Version))
+        return self.Version
