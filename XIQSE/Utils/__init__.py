@@ -25,9 +25,9 @@ def setFamily(family=None, emc_vars=None):
     if family:
         Family = family
     elif emc_vars["family"] in FamilyChildren:
-        Family = FamilyChildren[emc_vars[family]]
+        Family = FamilyChildren[emc_vars["family"]]
     elif emc_vars["deviceType"] in FamilyChildren:
-        Family = FamilyChildren[emc_vars[family]]
+        Family = FamilyChildren[emc_vars["deviceType"]]
     else:
         Family = emc_vars["family_vars"]
     return Family
