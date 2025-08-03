@@ -14,8 +14,6 @@ class XIQSE(object):
 
         self.CLI = CLI(self)
         self.OS = OS(self)
-
-        self.debug("Hello world !")
     
     def debug(self, debugOutput):
         if self.Debug:
