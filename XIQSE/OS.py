@@ -2,6 +2,7 @@ import re
 import subprocess
 import os
 
+from XIQSE import debug
 from XIQSE.Utils import parseRegexInput
 
 class OS(object):
