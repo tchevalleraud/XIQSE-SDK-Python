@@ -15,7 +15,7 @@ class Logger(object):
     def log(self, msg_level, msg, *args):
         msg_level = msg_level.upper()
         if LOG_LEVELS.get(msg_level, 0) >= self.level:
-            print("[{}] {}".format(msg_level, msg.format(*args)))
+            print("[{:<7}] {}".format(msg_level, msg.format(*args)))
     
     def debug(self, msg, *args):
         self.log('DEBUG', msg, *args)
