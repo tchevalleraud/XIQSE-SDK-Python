@@ -12,3 +12,21 @@ RegexNoError  = re.compile(
     re.IGNORECASE | re.MULTILINE
 )
 RegexPrompt = re.compile('.*[\?\$%#>]\s?$')
+
+RegexContextPatterns = {
+    'ERS Series' : [
+        re.compile('^(?:interface |router \w+$|route-map (?:\"[\w\d\s\.\+-]+\"|[\w\d\.-]+) \d+$|ip igmp profile \d+$|wireless|application|ipv6 dhcp guard policy |ipv6 nd raguard policy )'),
+        re.compile('^(?:security|crypto|ap-profile |captive-portal |network-profile |radio-profile )'),
+        re.compile('^(?:locale)'),
+    ],
+    'Fabric Engine' : [
+        re.compile('^ *(?:interface |router \w+$|router vrf|route-map (?:\"[\w\d\s\.\+-]+\"|[\w\d\.-]+) \d+$|application|i-sid \d+|wireless|logical-intf isis \d+|mgmt (?:\d|clip|vlan|oob)|ovsdb$)'),
+        re.compile('^ *(?:route-map (?:\"[\w\d\s\.\+-]+\"|[\w\d\.-]+) \d+$)'),
+    ],
+    'ISW-Series' : [
+        re.compile('^ *(?:ringv2-group |interface )'),
+    ],
+    'ISW-Series-Marvell' : [
+        re.compile('^ *(?:ringv2-group |interface )'),
+    ],
+}

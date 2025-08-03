@@ -1,8 +1,6 @@
-from java.lang import System
-from java.io import PrintStream, ByteArrayOutputStream
+from Utils.Regex import RegexContextPatterns
 
 import re
-import sys, os
 
 class CLI(object):
 
@@ -11,18 +9,29 @@ class CLI(object):
     def __init__(self, context):
         self.ctx = context
     
-    def sendCommandTest1(self, cmd):
-        _ = self.ctx.emc_cli.send(cmd)
-    
-    def sendCommandTest2(self, cmd):
-        sys.stdout = open(os.devnull, 'w')
-        self.ctx.emc_cli.send(cmd)
-        sys.stdout = sys.__stdout__
-    
-    def sendCommandTest3(self, cmd):
-        print(self.ctx.emc_cli.__class__)
-        print(self.ctx.emc_cli.getClass())
-        print(self.ctx.emc_cli.getClass().getName())
+    def printSummary(self):
+        Family = "Fabric Engine"
+        if not len(self.CommandHistory):
+            print "No command was performed"
+            return
+        print "The following command was successfully performed on switch :"
+        indent = ''
+        level = 0
+        if Family in RegexContextPatterns:
+            maxLevel = len(RegexContextPatterns[Family])
+        for cmd in CommandHistory:
+            if Family in RegexContextPatterns:
+                if level < maxLevel and RegexContextPatterns[Family][level].match(cmd):
+                    print "-> {}{}".format(indent, cmd)
+                    level += 1
+                    indent = ' ' * Indent * level
+                    continue
+                elif RegexExitInstance.match(cmd):
+                    if level > 0:
+                        level -= 1
+                    indent = ' ' * Indent * level
+            print "-> {}{}".format(indent, cmd)
+        CommandHistory = []
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
