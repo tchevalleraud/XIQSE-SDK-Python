@@ -13,9 +13,9 @@ class CLI(object):
     def printSummary(self):
         Family = "Fabric Engine"
         if not len(self.CommandHistory):
-            print "No command was performed"
+            self.ctx.log("No command was performed")
             return
-        print "The following command was successfully performed on switch :"
+        self.ctx.log("The following command was successfully performed on switch :")
         indent = ''
         level = 0
         if Family in RegexContextPatterns:
@@ -31,7 +31,7 @@ class CLI(object):
                     if level > 0:
                         level -= 1
                     indent = ' ' * self.Indent * level
-            print "-> {}{}".format(indent, cmd)
+            print "|-> {}{}".format(indent, cmd)
         self.CommandHistory = []
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
