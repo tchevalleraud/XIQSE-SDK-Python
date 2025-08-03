@@ -20,12 +20,7 @@ class CLI(object):
         sys.stdout = sys.__stdout__
     
     def sendCommandTest3(self, cmd):
-        baos = ByteArrayOutputStream()
-        ps = PrintStream(baos)
-        System.setOut(ps)
-        self.ctx.emc_cli.send(cmd)
-        System.setOut(System.out)
-        return baos.toString()
+        print(dir(self.ctx.emc_cli))
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
