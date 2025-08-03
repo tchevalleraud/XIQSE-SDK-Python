@@ -40,7 +40,7 @@ class GraphQL(object):
         session         = requests.Session()
         session.verify  = False
         session.timeout = 10
-        session.auth    = NbiAuth
+        session.auth    = self.NbiAuth
         session.headers.update({'Accept':           'application/json',
                                 'Accept-Encoding':  'gzip, deflate, br',
                                 'Connection':       'keep-alive',
