@@ -1,6 +1,8 @@
 from CLI import CLI
 from OS import OS
 
+import re
+
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False):
         self.Debug      = Debug
@@ -18,6 +20,15 @@ class XIQSE(object):
     def debug(self, debugOutput):
         if self.Debug:
             print("[DEBUG] {}".format(debugOutput))
+    
+    def scriptName(self):
+        name = None
+        if 'workflowName' in self.emc_vars: # Workflow
+            name = self.emc_vars['workflowName']
+        elif 'javax.script.filename' in self.emc_vars: # Script
+            nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
+            name = nameMatch.group(1) if nameMatch else None
+        return name
     
     def version(self):
         print("[DEBUG] Version : {}".format(self.Version))
