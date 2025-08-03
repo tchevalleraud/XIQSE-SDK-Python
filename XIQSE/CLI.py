@@ -5,27 +5,26 @@ class CLI(object):
     def __init__(self, context):
         self.ctx = context
 
-    def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
-        resultObj = self.sendCommandSilent(cmd, returnCliError, msgOnError, waitForPrompt)
-        if resultObj.isSuccess():
-            resultLines = resultObj.getOutput().splitlines()[1:-1]
-            for line in resultLines:
-                print "> " + line
-        else:
-            print 'CLI-ERROR: ' + resultObj.getError()
-            return False
-    
-    def sendCommandSilent(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
-        original_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
+    def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True, silent=False):
+        global LastError
+        resultObj = self.ctx.emc_cli.send(cmd, waitForPrompt)
+        if not resultObj.isSuccess():
+            exitError(resultObj.getError())
+        outputStr = self.ctx.cleanOutput(resultObj.getOutput())
+        if outputStr and self.ctx.cliError("\n".join(outputStr.split("\n")[:4])):
+            if returnCliError:
+                LastError = outputStr
+                if msgOnError:
+                    self.ctx.log("==> Ignoring above error: {}", msgOnError)
+                return None
+            abortError(cmd, outputStr)
 
-        try:
-            result = self.ctx.emc_cli.send(cmd, waitForPrompt)
-        finally:
-            sys.stdout.close()
-            sys.stdout = original_stdout
-        
-        return result
+        LastError = None
+
+        if silent:
+            return None
+
+        return outputStr
     
     def test(self):
         self.ctx.log("XIQSE.CLI.test => OK")
