@@ -21,7 +21,7 @@ def parseRegexInput(cmdRegexStr):
     return mode, cmdList, regex
 
 def setFamily(family=None, emc_vars=None):
-    global Family
+    Family = None
     if family:
         Family = family
     elif emc_vars["family"] in FamilyChildren:
