@@ -3,7 +3,7 @@ import requests
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from XIQSE.Utils import abortError, exitError
-from XIQSE.Utils.GraphQL import replaceKwargs
+from XIQSE.Utils.GraphQL import recursionKeySearch, replaceKwargs
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -38,17 +38,17 @@ class GraphQL(object):
         if returnKey:
             foundKey, returnValue = recursionKeySearch(response, returnKey)
             if foundKey:
-                if Debug:
-                    if debugKey: debug("{} = {}".format(debugKey, returnValue))
-                    else: debug("nbiQuery {} = {}".format(returnKey, returnValue))
+                if self.ctx.Debug:
+                    if debugKey: self.ctx.debug("{} = {}".format(debugKey, returnValue))
+                    else: self.ctx.debug("nbiQuery {} = {}".format(returnKey, returnValue))
                 return returnValue
             if returnKeyError:
                 return None
             abortError("nbiQuery for\n{}".format(jsonQuery), 'Key "{}" was not found in query response'.format(returnKey))
         
-        if Debug:
-            if debugKey: debug("{} = {}".format(debugKey, response))
-            else: debug("nbiQuery response = {}".format(response))
+        if self.ctx.Debug:
+            if debugKey: self.ctx.debug("{} = {}".format(debugKey, response))
+            else: self.ctx.debug("nbiQuery response = {}".format(response))
         return response
 
     def nbiSessionPost(self, jsonQuery, returnKeyError=False):
