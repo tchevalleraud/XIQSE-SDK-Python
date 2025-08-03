@@ -19,7 +19,7 @@ class CLI(object):
         level = 0
         if Family in RegexContextPatterns:
             maxLevel = len(RegexContextPatterns[Family])
-        for cmd in CommandHistory:
+        for cmd in self.CommandHistory:
             if Family in RegexContextPatterns:
                 if level < maxLevel and RegexContextPatterns[Family][level].match(cmd):
                     print "-> {}{}".format(indent, cmd)
@@ -31,7 +31,7 @@ class CLI(object):
                         level -= 1
                     indent = ' ' * Indent * level
             print "-> {}{}".format(indent, cmd)
-        CommandHistory = []
+        self.CommandHistory = []
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
