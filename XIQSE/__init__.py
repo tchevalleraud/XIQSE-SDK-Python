@@ -22,6 +22,13 @@ class XIQSE(object):
         self.OS         = OS(self)
         self.SNMP       = SNMP(self)
     
+    def abortError(self, cmd, errorOutput):
+        self.log("Aborting script due to error on previous command")
+        try:
+            print "@TODO"
+        finally:
+            self.exitError(errorOutput)
+    
     def cleanOutput(self, outputStr):
         if re.match(r'Error:', outputStr):
             return outputStr
@@ -37,6 +44,15 @@ class XIQSE(object):
             return True
         else:
             return False
+    
+    def exitError(seld, errorOutput, sleep=10):
+        if 'workflowMessage' in self.emc_vars:
+            time.sleep(sleep)
+            self.emc_results.put("deviceMessage", errorOutput)
+            self.emc_results.put("activityMessage", errorOutput)
+            self.emc_results.put("workflowMessage", errorOutput)
+        self.emc_results.setStatus(self.emc_results.Status.ERROR)
+        raise RuntimeError(errorOutput)
     
     def log(self, msg, *args):
         if self.debug:
