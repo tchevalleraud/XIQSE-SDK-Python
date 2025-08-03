@@ -31,6 +31,12 @@ class XIQSE(object):
         else:
             return '\n'.join(outputLines[1:])
     
+    def cliError(outputStr):
+        if not RegexNoError.search(outputStr) and RegexError.search(outputStr):
+            return True
+        else:
+            return False
+    
     def log(self, msg, *args):
         if self.debug:
             print("[LOG] " + msg.format(*args))
