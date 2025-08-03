@@ -3,7 +3,7 @@ from GraphQL import GraphQL
 from OS import OS
 from SNMP import SNMP
 
-form Utils.Logger import Logger
+from Utils.Logger import Logger
 from Utils.Regex import RegexError, RegexNoError, RegexPrompt
 
 import re
