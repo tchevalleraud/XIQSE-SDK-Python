@@ -8,17 +8,14 @@ class OS(object):
     def __init__(self, context):
         self.ctx = context
     
-    def execute(self, cmd):
+    def execute(self, cmd, output=True):
         try:
-            os.system(cmd)
-            return True
+            output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+            if output:
+                return output
+            else:
+                return True
         except Exception as e:
             print"{}: {}".format(type(e).__name__, str(e))
             print "Error executing '{}' on XIQSE shell".format(cmd)
             return False
-
-    def command(self, cmdRegexStr, debugKey=None):
-        mode, cmdList, regex = parseRegexInput(cmdRegexStr)
-        cmd = cmdList[0]
-        cmdList = cmd.split(' ')
-        debug("XIQSE.OS.command about to execute : {}".format(cmd))
