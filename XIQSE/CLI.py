@@ -5,19 +5,19 @@ class CLI(object):
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
         resultObj = self.ctx.emc_cli.send(cmd, waitForPrompt)
-        if resultObj.isSuccess():
-            outputStr = self.ctx.cleanOutput(resultObj.getOutput())
-            if outputStr and self.ctx.cliError("\n".join(outputStr.split("\n")[:4])):
-                if returnCliError:
-                    LastError = outputStr
-                    if msgOnError:
-                        print "==> Ignoring above error: {}\n\n".format(msgOnError)
-                    return None
-                abortError(cmd, outputStr)
-            LastError = None
-            return outputStr
-        else:
-            exitError(resultObj.getError())
+        #if resultObj.isSuccess():
+        #    outputStr = self.ctx.cleanOutput(resultObj.getOutput())
+        #    if outputStr and self.ctx.cliError("\n".join(outputStr.split("\n")[:4])):
+        #        if returnCliError:
+        #            LastError = outputStr
+        #            if msgOnError:
+        #                print "==> Ignoring above error: {}\n\n".format(msgOnError)
+        #            return None
+        #        abortError(cmd, outputStr)
+        #    LastError = None
+        #    return outputStr
+        #else:
+        #    exitError(resultObj.getError())
     
     def test(self):
         self.ctx.log("XIQSE.CLI.test => OK")
