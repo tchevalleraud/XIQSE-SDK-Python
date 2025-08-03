@@ -10,7 +10,7 @@ import re
 
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, log_level='INFO', sanity=False):
-        self.logger = Logger('DEBUG' if debug else log_level)
+        self.logger = Logger(log_level)
         self.sanity = sanity
 
         self.emc_cli        = emc_cli
