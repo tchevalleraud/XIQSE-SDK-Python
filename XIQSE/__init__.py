@@ -32,6 +32,12 @@ class XIQSE(object):
         finally:
             self.exitError(errorOutput)
     
+    def activityName(self):
+        name = None
+        if 'activityName' in self.emc_vars:
+            name = self.emc_vars['activityName']
+        return name
+    
     def cleanOutput(self, outputStr):
         if re.match(r'Error:', outputStr):
             return outputStr
@@ -68,7 +74,7 @@ class XIQSE(object):
     
     def printHeader(self, scriptVersion):
         print("=" * 60)
-        print("= Workflow {}, task xxx".format(self.scriptName()))
+        print("= Workflow {}, task {}".format(self.scriptName(), self.activityName()))
         print("=" * 60)
     
     def scriptName(self):
