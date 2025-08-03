@@ -1,3 +1,4 @@
+from XIQSE.Dicts.CLI import CLI_Dict
 from Utils import setFamily
 
 from CLI import CLI
@@ -26,6 +27,9 @@ class XIQSE(object):
         if self.Debug:
             print("[DEBUG] {}".format(debugOutput))
     
+    def getCLI(self, key):
+        return CLI_Dict[self.getFamily()][key]
+
     def getFamily(self):
         return self.Family
     
