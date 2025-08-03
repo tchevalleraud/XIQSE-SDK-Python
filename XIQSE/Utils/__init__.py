@@ -21,5 +21,9 @@ def parseRegexInput(cmdRegexStr):
     return mode, cmdList, regex
 
 def setFamily(family=None, emc_vars=None):
-    Family = "Fabric Engine"
+    Family = None
+    if family:
+        Family = family
+    else:
+        Family = "Unknown"
     return Family
