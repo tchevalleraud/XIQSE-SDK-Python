@@ -14,15 +14,6 @@ RegexNoError  = re.compile(
     re.IGNORECASE | re.MULTILINE
 )
 
-def abortError(cmd, errorOutput):
-    print "Aborting script due to error on previous command"
-    try:
-        print "#TODO : rollbackStack"
-        #rollbackStack()
-    finally:
-        print "Aborting because this command failed: {}".format(cmd)
-        exitError(errorOutput)
-
 def cleanOutput(outputStr):
     if re.match(r'Error:', outputStr):
         return outputStr
@@ -38,12 +29,3 @@ def cliError(outputStr):
         return True
     else:
         return False
-
-def exitError(errorOutput, sleep=10):
-    if 'workflowMessage' in self.ctx.emc_vars:
-        time.sleep(sleep)
-        self.ctx.emc_results.put("deviceMessage", errorOutput)
-        self.ctx.emc_results.put("activityMessage", errorOutput)
-        self.ctx.emc_results.put("workflowMessage", errorOutput)
-    self.ctx.emc_results.setStatus(self.ctx.Status.ERROR)
-    raise RuntimeError(errorOutput)

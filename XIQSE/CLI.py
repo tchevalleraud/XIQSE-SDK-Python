@@ -1,4 +1,5 @@
-from XIQSE.Utils.CLI import abortError, exitError, cliError, cleanOutput
+from XIQSE.Utils import abortError, exitError
+from XIQSE.Utils.CLI import cliError, cleanOutput
 
 class CLI(object):
     def __init__(self, context):

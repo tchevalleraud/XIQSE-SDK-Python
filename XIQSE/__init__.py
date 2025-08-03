@@ -7,13 +7,14 @@ from OS import OS
 import re
 
 class XIQSE(object):
-    def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
+    def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
         self.Debug      = Debug
         self.Family     = setFamily(None, emc_vars)
         self.Log        = Log
         self.Version    = "25.8.0-1"
 
         self.emc_cli        = emc_cli
+        self.emc_nbi        = emc_nbi
         self.emc_results    = emc_results
         self.emc_vars       = emc_vars
 
