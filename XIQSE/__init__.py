@@ -72,20 +72,21 @@ class XIQSE(object):
     def log(self, msg, *args):
         self.logger.info(msg, *args)
     
-    def printHeader(self, scriptVersion):
+    def printHeader(self, scriptVersion = '1.0', scriptAuthor = None):
         line_width = 80
 
-        print("=" * line_width)
-        header_text = "Workflow {}, task {}".format(self.scriptName(), self.activityName())
-        padding = line_width - len(header_text) - 6
-        if padding < 0:
-            padding = 0
-        print("== {}{} ==".format(header_text, " " * padding))
-        print("=" * line_width)
+        def formatLine(text):
+            padding = line_width - len(text) - 6 
+            if padding < 0:
+                padding = 0
+            return "== {}{} ==".format(text, " " * padding)
 
-
-        print("== Workflow {}, task {}".format(self.scriptName(), self.activityName()))
-        print("=" * 60)
+        print("=" * line_width)
+        print(formatLine("Workflow {}, task {}".format(self.scriptName(), self.activityName())))
+        if(scriptAuthor):
+            print(formatLine("Author: {}".format(scriptAuthor)))
+        print(formatLine("Script version: {} | SDK Version: {}".format(scriptVersion, self.version)))
+        print("=" * line_width)
     
     def scriptName(self):
         name = None
@@ -95,6 +96,9 @@ class XIQSE(object):
             nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
             name = nameMatch.group(1) if nameMatch else None
         return name
+    
+    def version(self):
+        return "1.0"
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
