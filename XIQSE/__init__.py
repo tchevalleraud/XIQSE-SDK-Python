@@ -10,10 +10,13 @@ from Utils.Regex import RegexError, RegexNoError, RegexPrompt
 
 import re
 
+__version__ = "25.0.0-1"
+
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_nbi=None, emc_results=None, emc_vars=None, log_level='INFO', sanity=False):
         self.logger = Logger(log_level)
         self.sanity = sanity
+        self.version = __version__
 
         self.emc_cli        = emc_cli
         self.emc_nbi        = emc_nbi
@@ -96,9 +99,6 @@ class XIQSE(object):
             nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
             name = nameMatch.group(1) if nameMatch else None
         return name
-    
-    def version(self):
-        return "1.0"
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
