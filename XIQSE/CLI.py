@@ -1,3 +1,4 @@
+from java.lang import System
 from java.io import PrintStream, ByteArrayOutputStream
 
 import re
