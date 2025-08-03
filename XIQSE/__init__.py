@@ -3,6 +3,8 @@ from GraphQL import GraphQL
 from OS import OS
 from SNMP import SNMP
 
+from Utils.Regex import RegexPrompt
+
 import re
 
 class XIQSE(object):

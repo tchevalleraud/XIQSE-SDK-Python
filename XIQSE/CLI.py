@@ -1,5 +1,3 @@
-from Utils.Regex import RegexPrompt
-
 class CLI(object):
     def __init__(self, context):
         self.ctx = context
