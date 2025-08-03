@@ -1,6 +1,9 @@
 import json
 import requests
+
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from XIQSE.Utils.GraphQL import replaceKwargs
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 class GraphQL(object):
@@ -14,3 +17,8 @@ class GraphQL(object):
         else:
             NbiUrl  = None
             NbiAuth = None
+    
+    def nbiQuery(jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
+        jsonQuery = replaceKwargs(jsonQueryDict['json'], kwargs)
+        returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
+        self.ctx.debug("NBI Query:\n{}\n".format(jsonQuery))
