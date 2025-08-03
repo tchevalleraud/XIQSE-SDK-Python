@@ -68,8 +68,17 @@ class XIQSE(object):
     
     def printHeader(self, scriptVersion):
         print("=" * 60)
-        print("= Workflow xxx, task xxx")
+        print("= Workflow {}, task xxx".format(self.scriptName()))
         print("=" * 60)
+    
+    def scriptName(self):
+        name = None
+        if 'workflowName' in self.emc_vars:
+            name = self.emc_vars['workflowName']
+        else 'javax.script.filename' in self.emc_vars:
+            nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
+            name = nameMatch.group(1) if nameMatch else None
+        return name
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
