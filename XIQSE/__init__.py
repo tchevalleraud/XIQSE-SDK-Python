@@ -7,6 +7,7 @@ import re
 class XIQSE(object):
     def __init__(self, emc_cli=None, emc_results=None, emc_vars=None, Debug=False, Log=True):
         self.Debug      = Debug
+        self.Family     = "Fabric Engine"
         self.Log        = Log
         self.Version    = "25.8.0-1"
 
@@ -22,7 +23,7 @@ class XIQSE(object):
             print("[DEBUG] {}".format(debugOutput))
     
     def getFamily(self):
-        return self.Version
+        return self.Family
     
     def log(self, logOutput):
         if self.Log:
