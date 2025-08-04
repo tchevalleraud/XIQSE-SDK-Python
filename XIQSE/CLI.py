@@ -70,4 +70,4 @@ class CLI(object):
     def testDebug(self):
         print("Test Debug")
         print(self.ctx.emc_vars)
-        print(self.ctx.emc_cli)
+        print(self.ctx.emc_cli.getUser())
