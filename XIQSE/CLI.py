@@ -47,6 +47,7 @@ class CLI(object):
             LastError = None
             return True
         else:
+            self.ctx.debug("Execute command : {}".format(cmd))
             resultObj = self.ctx.emc_cli.send(cmd, waitForPrompt)
             if resultObj.isSuccess():
                 outputStr = self.ctx.cleanOutput(resultObj.getOutput())
@@ -54,7 +55,7 @@ class CLI(object):
                     if returnCliError:
                         LastError = outputStr
                         if msgOnError:
-                            self.ctx.log("Ignoring above error: {}".format(msgOnError))
+                            self.ctx.error("Ignoring above error: {}".format(msgOnError))
                         return False
                     self.ctx.abortError(cmd, outputStr)
                 self.CommandHistory.append(cmdStore)
