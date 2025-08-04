@@ -65,4 +65,4 @@ class CLI(object):
                 self.ctx.exitError(resultObj.getError())
     
     def test(self):
-        self.ctx.log("XIQSE.CLI.test => OK")
+        self.ctx.debug("XIQSE.CLI.test => OK")
