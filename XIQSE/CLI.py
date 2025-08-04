@@ -66,3 +66,6 @@ class CLI(object):
     
     def test(self):
         self.ctx.debug("XIQSE.CLI.test => OK")
+    
+    def testDebug(self):
+        self.ctx.debug(self.ctx.emc_cli.getUser())
