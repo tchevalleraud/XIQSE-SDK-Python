@@ -31,7 +31,7 @@ class CLI(object):
                     if level > 0:
                         level -= 1
                     indent = ' ' * self.Indent * level
-            print "|-> {}{}".format(indent, cmd)
+            print "        |-> {}{}".format(indent, cmd)
         self.CommandHistory = []
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
