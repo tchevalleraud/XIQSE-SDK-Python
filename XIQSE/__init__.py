@@ -19,7 +19,7 @@ class XIQSE(object):
         self.sanity = sanity
         self.version = __version__
 
-        self Family = None
+        self.Family = None
         self.setFamily()
 
         self.emc_cli        = emc_cli
