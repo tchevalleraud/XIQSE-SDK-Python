@@ -19,9 +19,6 @@ class XIQSE(object):
         self.sanity = sanity
         self.version = __version__
 
-        self.Family = None
-        self.setFamily()
-
         self.emc_cli        = emc_cli
         self.emc_nbi        = emc_nbi
         self.emc_results    = emc_results
@@ -31,6 +28,9 @@ class XIQSE(object):
         self.GraphQL    = GraphQL(self)
         self.OS         = OS(self)
         self.SNMP       = SNMP(self)
+
+        self.Family = None
+        self.setFamily()
     
     def abortError(self, cmd, errorOutput):
         self.log("Aborting script due to error on previous command")
