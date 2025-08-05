@@ -97,6 +97,7 @@ class XIQSE(object):
             print(formatLine("Author: {}".format(scriptAuthor)))
         print(formatLine("Script version: {} | SDK Version: {}".format(scriptVersion, self.version)))
         if fullInfo:
+            print("=" * line_width)
             print(formatLine("Device family : {}".format(self.getFamily())))
         print("=" * line_width)
     
