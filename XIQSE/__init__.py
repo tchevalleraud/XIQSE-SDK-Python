@@ -5,6 +5,7 @@ from GraphQL import GraphQL
 from OS import OS
 from SNMP import SNMP
 
+from Utils.Family import FamilyChildren
 from Utils.Logger import Logger
 from Utils.Regex import RegexError, RegexNoError, RegexPrompt
 
@@ -17,6 +18,9 @@ class XIQSE(object):
         self.logger = Logger(log_level)
         self.sanity = sanity
         self.version = __version__
+
+        self Family = None
+        self.setFamily()
 
         self.emc_cli        = emc_cli
         self.emc_nbi        = emc_nbi
@@ -72,10 +76,13 @@ class XIQSE(object):
         self.emc_results.setStatus(self.emc_results.Status.ERROR)
         raise RuntimeError(errorOutput)
     
+    def getFamily(self):
+        return self.Family
+    
     def log(self, msg, *args):
         self.logger.info(msg, *args)
     
-    def printHeader(self, scriptVersion = '1.0', scriptAuthor = None):
+    def printHeader(self, scriptVersion = '1.0', scriptAuthor = None, fullInfo = False):
         line_width = 80
 
         def formatLine(text):
@@ -89,6 +96,8 @@ class XIQSE(object):
         if(scriptAuthor):
             print(formatLine("Author: {}".format(scriptAuthor)))
         print(formatLine("Script version: {} | SDK Version: {}".format(scriptVersion, self.version)))
+        if fullInfo:
+            print(formatLine("Device family : {}".format(getFamily())))
         print("=" * line_width)
     
     def scriptName(self):
@@ -99,6 +108,16 @@ class XIQSE(object):
             nameMatch = re.search(r'\/([^\/\.]+)\.py$', self.emc_vars['javax.script.filename'])
             name = nameMatch.group(1) if nameMatch else None
         return name
+    
+    def setFamily(self, family = None):
+        if family:
+            self.Family = family
+        elif self.emc_vars["family"] in FamilyChildren:
+            self.Family = FamilyChildren[self.emc_vars["family"]]
+        elif self.emc_vars["deviceType"] in FamilyChildren:
+            self.Family = FamilyChildren[self.emc_vars["deviceType"]]
+        else:
+            self.Family = ["family"]
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
