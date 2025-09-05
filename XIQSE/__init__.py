@@ -1,3 +1,18 @@
+import re
+import sys
+import os
+
+# Add current directory to path for Jython compatibility
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+try:
+    from .CLI import CLI
+except ImportError:
+    # Fallback for Jython or other environments where relative imports don't work
+    from CLI import CLI
+
 __version__ = "25.0.0.0-1"
 
 class XIQSE(object):
@@ -10,7 +25,13 @@ class XIQSE(object):
         self.emc_results = emc_results
         self.emc_vars = emc_vars
 
+        self.CLI = CLI(self)
+
         self.Family = None
+
+    def getFamily(self):
+        """Get device family information"""
+        return self.Family if self.Family else "Unknown"
 
     def activityName(self):
         name = None
