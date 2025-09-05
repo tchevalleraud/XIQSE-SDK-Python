@@ -1,13 +1,14 @@
 import re
+import time
 
-from CLI import CLI
-from GraphQL import GraphQL
-from OS import OS
-from SNMP import SNMP
+from .CLI import CLI
+from .GraphQL import GraphQL
+from .OS import OS
+from .SNMP import SNMP
 
-from Utils.Family import FamilyChildren
-from Utils.Logger import Logger
-from Utils.Regex import RegexError, RegexNoError, RegexPrompt
+from .Utils.Family import FamilyChildren
+from .Utils.Logger import Logger
+from .Utils.Regex import RegexError, RegexNoError, RegexPrompt
 
 __version__ = "25.0.0.0-1"
 

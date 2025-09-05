@@ -1,4 +1,4 @@
-from Utils.Regex import RegexContextPatterns, RegexExitInstance
+from .Utils.Regex import RegexContextPatterns, RegexExitInstance
 
 import re
 
