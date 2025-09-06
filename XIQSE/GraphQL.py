@@ -29,22 +29,18 @@ class GraphQL(object):
             if not query_str.startswith('query') and not query_str.startswith('mutation'):
                 query_str = 'query ' + query_str
             
-            self.ctx.debug("Executing GraphQL query: {}", query_str[:100] + "..." if len(query_str) > 100 else query_str)
-            
+            # Handle variables if provided
             if variables:
                 self.ctx.debug("Query variables: {}", json.dumps(variables, indent=2))
+                # Note: Variables handling may need to be implemented based on NBI API capabilities
+                # For now, we'll log a warning if variables are provided
+                self.ctx.warning("Variables provided but may not be supported by NBI API: {}", json.dumps(variables))
             
-            # Prepare the request payload
-            payload = {
-                "query": query_str
-            }
+            self.ctx.debug("Executing GraphQL query: {}", query_str[:100] + "..." if len(query_str) > 100 else query_str)
             
-            if variables:
-                payload["variables"] = variables
-            
-            # Execute the query using emc_nbi
+            # Execute the query using emc_nbi (pass query string directly)
             start_time = time.time()
-            response = self.ctx.emc_nbi.query(payload)
+            response = self.ctx.emc_nbi.query(query_str)
             execution_time = time.time() - start_time
             
             self.ctx.debug("GraphQL query executed in {:.2f} seconds", execution_time)
@@ -87,22 +83,18 @@ class GraphQL(object):
             if not mutation_str.startswith('mutation'):
                 mutation_str = 'mutation ' + mutation_str
             
-            self.ctx.debug("Executing GraphQL mutation: {}", mutation_str[:100] + "..." if len(mutation_str) > 100 else mutation_str)
-            
+            # Handle variables if provided
             if variables:
                 self.ctx.debug("Mutation variables: {}", json.dumps(variables, indent=2))
+                # Note: Variables handling may need to be implemented based on NBI API capabilities
+                # For now, we'll log a warning if variables are provided
+                self.ctx.warning("Variables provided but may not be supported by NBI API: {}", json.dumps(variables))
             
-            # Prepare the request payload
-            payload = {
-                "query": mutation_str
-            }
+            self.ctx.debug("Executing GraphQL mutation: {}", mutation_str[:100] + "..." if len(mutation_str) > 100 else mutation_str)
             
-            if variables:
-                payload["variables"] = variables
-            
-            # Execute the mutation using emc_nbi
+            # Execute the mutation using emc_nbi (pass mutation string directly)
             start_time = time.time()
-            response = self.ctx.emc_nbi.mutation(payload)
+            response = self.ctx.emc_nbi.mutation(mutation_str)
             execution_time = time.time() - start_time
             
             self.ctx.debug("GraphQL mutation executed in {:.2f} seconds", execution_time)
