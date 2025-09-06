@@ -30,7 +30,7 @@ class GraphQL(object):
         LastNbiError = None
 
         if returnKey:
-            foundKey, returnValue = recursionKeySearch(response, returnKey)
+            foundKey, returnValue = self.recursionKeySearch(response, returnKey)
             if foundKey:
                 return returnValue
             if returnKeyError:
