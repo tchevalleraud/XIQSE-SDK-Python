@@ -30,7 +30,8 @@ class CSV(object):
         
         csvVarDict['__INDEX__'] = indexKey
         csvVarDict['__PATH__'] = csvFilePath
-        self.ctx.debug("readCsvToDict() csvVarDict =\n{}".format(json.dumps(csvVarDict, indent=4, sort_keys=True)))
+        debug_msg = "readCsvToDict() csvVarDict =\n" + json.dumps(csvVarDict, indent=4, sort_keys=True)
+        self.ctx.debug(debug_msg)
         return csvVarDict
 
     def varLookup(self, inputStr, csvVarDict, lookup):
