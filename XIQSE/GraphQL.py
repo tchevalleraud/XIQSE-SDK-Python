@@ -13,7 +13,7 @@ class GraphQL(object):
 
     def nbiQueryDict(self, key):
         self.ctx.log("NBI Key : {}".format(key))
-        self.ctx.log("NBI query : {}".format(NBI_Dict[key]['json']))
+        debug(NBI_Dict[key]['json'])
     
     def test(self):
         self.ctx.log("XIQSE.GraphQL.test => OK")
