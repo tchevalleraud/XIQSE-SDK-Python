@@ -9,7 +9,7 @@ class CSV(object):
     def __init__(self, context):
         self.ctx = context
     
-    def readCsvToDict(self, csvFilePath, lookup=None, delimiter=','):
+    def read(self, csvFilePath, lookup=None, delimiter=','):
         if not os.path.exists(csvFilePath):
             self.ctx.exitError("readCsvToDict: CSV file {} not found!".format(csvFilePath))
         
@@ -34,7 +34,7 @@ class CSV(object):
         self.ctx.debug("readCsvToDict() csvVarDict =\n{}".format(json.dumps(csvVarDict, indent=4, sort_keys=True)))
         return csvVarDict
 
-    def csvVarLookup(self, inputStr, csvVarDict, lookup):
+    def varLookup(self, inputStr, csvVarDict, lookup):
         csvVarsUsed = {x.group(1):1 for x in list(re.finditer(r'\$<([\w -]+)>', inputStr)) + list(re.finditer(r'\$\(([\w -]+)\)', inputStr))}
         outputStr = inputStr
         
