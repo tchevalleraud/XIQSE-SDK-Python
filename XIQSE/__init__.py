@@ -2,6 +2,7 @@ import re
 import time
 
 from .CLI import CLI
+from .CSV import CSV
 from .GraphQL import GraphQL
 from .OS import OS
 from .SNMP import SNMP
@@ -24,6 +25,7 @@ class XIQSE(object):
         self.emc_vars = emc_vars
 
         self.CLI = CLI(self)
+        self.CSV = CSV(self)
         self.GraphQL = GraphQL(self)
         self.OS = OS(self)
         self.SNMP = SNMP(self)
