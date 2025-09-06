@@ -1,5 +1,4 @@
 import csv
-import io
 import os.path
 import re
 import json
@@ -14,7 +13,7 @@ class CSV(object):
             self.ctx.exitError("readCsvToDict: CSV file {} not found!".format(csvFilePath))
         
         csvVarDict = {}
-        with io.open(csvFilePath, mode='r', encoding='utf-8-sig') as csv_file:
+        with open(csvFilePath, mode='r', encoding='utf-8-sig') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=delimiter)
             firstRow = True
             for row in csv_reader:
