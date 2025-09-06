@@ -16,7 +16,7 @@ class GraphQL(object):
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         
-        response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.emc_nbi.query(jsonQuery)
+        response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.ctx.emc_nbi.query(jsonQuery)
         self.ctx.debug("nbiQuery response = {}".format(response))
         
 
