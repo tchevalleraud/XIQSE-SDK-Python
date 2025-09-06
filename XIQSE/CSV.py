@@ -39,7 +39,8 @@ class CSV(object):
         outputStr = inputStr
         
         if csvVarsUsed:
-            self.ctx.debug("csvVarLookup csvVarsUsed = {}".format(csvVarsUsed))
+            debug_msg = "csvVarLookup csvVarsUsed = " + str(csvVarsUsed)
+            self.ctx.debug(debug_msg)
             missingVarList = [x for x in csvVarsUsed if lookup not in csvVarDict or x not in csvVarDict[lookup]]
             
             if missingVarList:
@@ -52,10 +53,13 @@ class CSV(object):
                 outputStr = re.sub(r'(?:\$<' + csvVar + '>|\$\(' + csvVar + '\))', csvVarDict[lookup][csvVar], outputStr)
             
             if "\n" in inputStr:
-                self.ctx.debug("csvVarLookup input: {}\n{}\n".format(type(inputStr), inputStr))
-                self.ctx.debug("csvVarLookup output: {}\n{}\n".format(type(outputStr), outputStr))
+                debug_input = "csvVarLookup input: " + str(type(inputStr)) + "\n" + inputStr + "\n"
+                debug_output = "csvVarLookup output: " + str(type(outputStr)) + "\n" + outputStr + "\n"
+                self.ctx.debug(debug_input)
+                self.ctx.debug(debug_output)
             else:
-                self.ctx.debug("csvVarLookup {} {} =  {} {}".format(type(inputStr), inputStr, type(outputStr), outputStr))
+                debug_msg = "csvVarLookup " + str(type(inputStr)) + " " + inputStr + " = " + str(type(outputStr)) + " " + outputStr
+                self.ctx.debug(debug_msg)
         
         return outputStr
     
