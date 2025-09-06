@@ -16,16 +16,16 @@ class GraphQL(object):
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         
-        response = self.nbiSessionPost(jsonQuery, returnKeyError) if NbiUrl else self.emc_nbi.query(jsonQuery)
+        response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.emc_nbi.query(jsonQuery)
         self.ctx.debug("nbiQuery response = {}".format(response))
         
 
     def nbiQueryDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
         return self.nbiQuery(NBI_Dict[key], debugKey, returnKeyError, **kwargs)
 
-    def nbiSessionPost(jsonQuery, returnKeyError=False):
+    def nbiSessionPost(self, jsonQuery, returnKeyError=False):
         global LastNbiError
-        session = request.Session()
+        session = requests.Session()
         session.verify = False
         session.timeout = 10
         session.auth = None
@@ -57,7 +57,7 @@ class GraphQL(object):
         self.ctx.debug("nbiSessionPost() jsonResponse = {}".format(jsonResponse))
         return jsonResponse
     
-    def replaceKwargs(queryString, kwargs):
+    def replaceKwargs(self, queryString, kwargs):
         for key in kwargs:
             replaceValue = str(kwargs[key]).lower() if type(kwargs[key]) == bool else str(kwargs[key])
             queryString = queryString.replace('<'+key+'>', replaceValue)
