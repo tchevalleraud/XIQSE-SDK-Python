@@ -8,6 +8,31 @@ class GraphQL(object):
     def test(self):
         self.ctx.log("XIQSE.GraphQL.test => OK")
     
+    def _convert_java_response(self, response):
+        """
+        Convert Java objects (like HashMap) to Python-compatible format
+        
+        Args:
+            response: The response from NBI API (could be Java object or Python object)
+            
+        Returns:
+            str or dict: Converted response in Python format
+        """
+        try:
+            # Check if it's a Java object
+            if hasattr(response, 'toString'):
+                # Convert Java object to string
+                return str(response)
+            elif isinstance(response, dict):
+                # Already a Python dict
+                return response
+            else:
+                # Convert to string representation
+                return str(response)
+        except Exception as e:
+            self.ctx.warning("Error converting response: {}", str(e))
+            return str(response)
+    
     def nbiQuery(self, query, variables=None, timeout=30):
         """
         Execute a GraphQL query using the NBI (North Bound Interface)
@@ -45,17 +70,23 @@ class GraphQL(object):
             
             self.ctx.debug("GraphQL query executed in {:.2f} seconds", execution_time)
             
-            # Check for errors in the response
-            if "errors" in response and response["errors"]:
-                error_msg = "GraphQL query errors: {}".format(json.dumps(response["errors"], indent=2))
+            # Convert response to Python-compatible format
+            converted_response = self._convert_java_response(response)
+            
+            # Log the response
+            self.ctx.debug("GraphQL query response: {}", converted_response)
+            
+            # Check for errors if it's a dict
+            if isinstance(converted_response, dict) and "errors" in converted_response and converted_response["errors"]:
+                error_msg = "GraphQL query errors: {}".format(json.dumps(converted_response["errors"], indent=2))
                 self.ctx.error(error_msg)
                 raise RuntimeError(error_msg)
             
-            # Log successful response
-            if "data" in response:
-                self.ctx.debug("GraphQL query successful, data keys: {}", list(response["data"].keys()) if response["data"] else "None")
+            # Log successful response if it's a dict
+            if isinstance(converted_response, dict) and "data" in converted_response:
+                self.ctx.debug("GraphQL query successful, data keys: {}", list(converted_response["data"].keys()) if converted_response["data"] else "None")
             
-            return response
+            return converted_response
             
         except Exception as e:
             error_msg = "GraphQL query failed: {}".format(str(e))
@@ -99,17 +130,23 @@ class GraphQL(object):
             
             self.ctx.debug("GraphQL mutation executed in {:.2f} seconds", execution_time)
             
-            # Check for errors in the response
-            if "errors" in response and response["errors"]:
-                error_msg = "GraphQL mutation errors: {}".format(json.dumps(response["errors"], indent=2))
+            # Convert response to Python-compatible format
+            converted_response = self._convert_java_response(response)
+            
+            # Log the response
+            self.ctx.debug("GraphQL mutation response: {}", converted_response)
+            
+            # Check for errors if it's a dict
+            if isinstance(converted_response, dict) and "errors" in converted_response and converted_response["errors"]:
+                error_msg = "GraphQL mutation errors: {}".format(json.dumps(converted_response["errors"], indent=2))
                 self.ctx.error(error_msg)
                 raise RuntimeError(error_msg)
             
-            # Log successful response
-            if "data" in response:
-                self.ctx.debug("GraphQL mutation successful, data keys: {}", list(response["data"].keys()) if response["data"] else "None")
+            # Log successful response if it's a dict
+            if isinstance(converted_response, dict) and "data" in converted_response:
+                self.ctx.debug("GraphQL mutation successful, data keys: {}", list(converted_response["data"].keys()) if converted_response["data"] else "None")
             
-            return response
+            return converted_response
             
         except Exception as e:
             error_msg = "GraphQL mutation failed: {}".format(str(e))
