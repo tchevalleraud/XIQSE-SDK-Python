@@ -13,7 +13,7 @@ class GraphQL(object):
     
     def nbiQuery(self, jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
         global LastNbiError
-        jsonQuery = replaceKwargs(jsonQueryDict['json'], kwargs)
+        jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         
         response = self.nbiSessionPost(jsonQuery, returnKeyError) if NbiUrl else self.emc_nbi.query(jsonQuery)
@@ -56,6 +56,12 @@ class GraphQL(object):
             self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), "JSON decoding failed")
         self.ctx.debug("nbiSessionPost() jsonResponse = {}".format(jsonResponse))
         return jsonResponse
+    
+    def replaceKwargs(queryString, kwargs):
+        for key in kwargs:
+            replaceValue = str(kwargs[key]).lower() if type(kwargs[key]) == bool else str(kwargs[key])
+            queryString = queryString.replace('<'+key+'>', replaceValue)
+        return queryString
     
     def test(self):
         self.ctx.log("XIQSE.GraphQL.test => OK")
