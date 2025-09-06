@@ -12,6 +12,43 @@ class GraphQL(object):
         self.ctx = context
         self.nbiUrl = None
     
+    def nbiMutation(self, jsonQueryDict, returnKeyError=False, debugKey=None, **kwargs):
+        global LastNbiError
+        jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
+        returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
+        if self.ctx.sanity:
+            self.ctx.debug("SANITY - NBI Mutation:\n{}\n".format(jsonQuery))
+            LastNbiError = None
+            return True
+        self.ctx.debug("NBI Mutation Query:\n{}\n".format(jsonQuery))
+        response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.ctx.emc_nbi.query(jsonQuery)
+        self.ctx.debug("nbiQuery response = {}".format(response))
+        if 'errors' in response:
+            if returnKeyError:
+                LastNbiError = response['errors'][0].message
+                return None
+            self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), response['errors'][0].message)
+
+        foundKey, returnStatus, returnMessage = self.recursionStatusSearch(response)
+        if foundKey:
+            self.ctx.debug("nbiMutation status = {} / message = {}".format(returnStatus, returnMessage))
+        elif not returnKeyError:
+            self.ctx.abortError("nbiMutation for\n{}".format(jsonQuery), 'Key "status" was not found in query response')
+
+        if returnStatus == "SUCCESS":
+            LastNbiError = None
+            if returnKey:
+                foundKey, returnValue = self.recursionKeySearch(response, returnKey)
+                if foundKey:
+                    return returnValue
+                if returnKeyError:
+                    return None
+                self.ctx.abortError("nbiMutation for\n{}".format(jsonQuery), 'Key "{}" was not found in mutation response'.format(returnKey))
+            return True
+        else:
+            LastNbiError = returnMessage
+            return False
+    
     def nbiQuery(self, jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
         global LastNbiError
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
@@ -87,6 +124,20 @@ class GraphQL(object):
                 if foundKey:
                     return True, foundValue
             return [None, None]
+    
+    def recursionStatusSearch(self, nestedDict):
+        for key, value in nestedDict.iteritems():
+            if key == 'status':
+                if 'message' in nestedDict:
+                    return True, value, nestedDict['message']
+                else:
+                    return True, value, None
+        for key, value in nestedDict.iteritems():
+            if isinstance(value, (dict, LinkedHashMap)):
+                foundKey, foundValue, foundMsg = self.recursionStatusSearch(value)
+                if foundKey:
+                    return True, foundValue, foundMsg
+            return [None, None, None]
     
     def replaceKwargs(self, queryString, kwargs):
         for key in kwargs:
