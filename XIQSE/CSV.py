@@ -33,8 +33,7 @@ class CSV(object):
         
         csvVarDict['__INDEX__'] = indexKey
         csvVarDict['__PATH__'] = csvFilePath
-        debug_msg = "readCsvToDict() csvVarDict =\n" + json.dumps(csvVarDict, indent=4, sort_keys=True).replace('{', '{{').replace('}', '}}')
-        self.ctx.debug(debug_msg)
+        self.ctx.debug("\n" + json.dumps(csvVarDict, indent=4, sort_keys=True).replace('{', '{{').replace('}', '}}'))
         return csvVarDict
 
     def varLookup(self, inputStr, csvVarDict, lookup):
@@ -42,26 +41,24 @@ class CSV(object):
         outputStr = inputStr
         
         if csvVarsUsed:
-            debug_msg = "csvVarLookup csvVarsUsed = " + str(csvVarsUsed).replace('{', '{{').replace('}', '}}')
-            self.ctx.debug(debug_msg)
             missingVarList = [x for x in csvVarsUsed if lookup not in csvVarDict or x not in csvVarDict[lookup]]
             
             if missingVarList:
                 if csvVarDict:
-                    self.ctx.exitError("csvVarLookup: the following variables were not found in the CSV file {} for lookup {}:\n{}".format(csvVarDict['__PATH__'], lookup, missingVarList))
+                    self.ctx.exitError("varLookup: the following variables were not found in the CSV file {} for lookup {}:\n{}".format(csvVarDict['__PATH__'], lookup, missingVarList))
                 else:
-                    self.ctx.exitError("csvVarLookup: no CSV file provided but the following variables were found requiring CSV lookup {}:\n{}".format(lookup, missingVarList))
+                    self.ctx.exitError("varLookup: no CSV file provided but the following variables were found requiring CSV lookup {}:\n{}".format(lookup, missingVarList))
             
             for csvVar in csvVarsUsed:
                 outputStr = re.sub(r'(?:\$<' + csvVar + '>|\$\(' + csvVar + '\))', csvVarDict[lookup][csvVar], outputStr)
             
             if "\n" in inputStr:
-                debug_input = "csvVarLookup input: " + str(type(inputStr)) + "\n" + inputStr + "\n"
-                debug_output = "csvVarLookup output: " + str(type(outputStr)) + "\n" + outputStr + "\n"
+                debug_input = "varLookup input: " + str(type(inputStr)) + "\n" + inputStr + "\n"
+                debug_output = "varLookup output: " + str(type(outputStr)) + "\n" + outputStr + "\n"
                 self.ctx.debug(debug_input)
                 self.ctx.debug(debug_output)
             else:
-                debug_msg = "csvVarLookup " + str(type(inputStr)) + " " + inputStr + " = " + str(type(outputStr)) + " " + outputStr
+                debug_msg = "varLookup " + str(type(inputStr)) + " " + inputStr + " = " + str(type(outputStr)) + " " + outputStr
                 self.ctx.debug(debug_msg)
         
         return outputStr
