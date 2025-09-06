@@ -30,7 +30,7 @@ class CSV(object):
         
         csvVarDict['__INDEX__'] = indexKey
         csvVarDict['__PATH__'] = csvFilePath
-        debug_msg = "readCsvToDict() csvVarDict =\n" + json.dumps(csvVarDict, indent=4, sort_keys=True)
+        debug_msg = "readCsvToDict() csvVarDict =\n" + json.dumps(csvVarDict, indent=4, sort_keys=True).replace('{', '{{').replace('}', '}}')
         self.ctx.debug(debug_msg)
         return csvVarDict
 
