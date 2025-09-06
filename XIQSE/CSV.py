@@ -39,7 +39,7 @@ class CSV(object):
         outputStr = inputStr
         
         if csvVarsUsed:
-            debug_msg = "csvVarLookup csvVarsUsed = " + str(csvVarsUsed)
+            debug_msg = "csvVarLookup csvVarsUsed = " + str(csvVarsUsed).replace('{', '{{').replace('}', '}}')
             self.ctx.debug(debug_msg)
             missingVarList = [x for x in csvVarsUsed if lookup not in csvVarDict or x not in csvVarDict[lookup]]
             
