@@ -112,12 +112,12 @@ class XIQSE(object):
     def setFamily(self, family = None):
         if family:
             self.Family = family
-        elif self.emc_vars["family"] in FamilyChildren:
+        elif "family" in self.emc_vars and self.emc_vars["family"] in FamilyChildren:
             self.Family = FamilyChildren[self.emc_vars["family"]]
-        elif self.emc_vars["deviceType"] in FamilyChildren:
+        elif "deviceType" in self.emc_vars and self.emc_vars["deviceType"] in FamilyChildren:
             self.Family = FamilyChildren[self.emc_vars["deviceType"]]
         else:
-            self.Family = ["family"]
+            self.Family = "unknown"
     
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)

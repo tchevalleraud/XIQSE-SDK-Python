@@ -21,12 +21,14 @@ from XIQSE import XIQSE
 XIQSE = XIQSE(emc_cli, emc_nbi, emc_results, emc_vars)
 
 def main():
-    XIQSE.printHeader()
-
+    XIQSE.printHeader(scriptAuthor="Thibault CHEVALLERAUD (Sr. System Engineer / Extreme Networks)")
+    
     XIQSE.CLI.sendCommand("enable")
-    XIQSE.CLI.sendCommand("config terminal")
-    XIQSE.CLI.sendCommand("sys name TOTO")
+    XIQSE.CLI.sendCommand("configure terminal")
+    XIQSE.CLI.sendCommand("sys name TEST")
     XIQSE.CLI.sendCommand("save config")
+    
+    XIQSE.CLI.printSummary()
 
 main()
 ```
