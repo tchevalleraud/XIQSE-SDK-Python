@@ -17,12 +17,12 @@ class GraphQL(object):
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         if self.ctx.sanity:
-            self.ctx.debug("SANITY - NBI Mutation:\n{}\n".format(jsonQuery))
+            self.ctx.debug("SANITY - NBI Mutation:\n%s\n", jsonQuery)
             LastNbiError = None
             return True
-        self.ctx.debug("NBI Mutation Query:\n{}\n".format(jsonQuery))
+        self.ctx.debug("NBI Mutation Query:\n%s\n", jsonQuery)
         response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.ctx.emc_nbi.query(jsonQuery)
-        self.ctx.debug("nbiQuery response = {}".format(response))
+        self.ctx.debug("nbiQuery response = %s", response)
         if 'errors' in response:
             if returnKeyError:
                 LastNbiError = response['errors'][0].message
@@ -31,7 +31,7 @@ class GraphQL(object):
 
         foundKey, returnStatus, returnMessage = self.recursionStatusSearch(response)
         if foundKey:
-            self.ctx.debug("nbiMutation status = {} / message = {}".format(returnStatus, returnMessage))
+            self.ctx.debug("nbiMutation status = %s / message = %s", returnStatus, returnMessage)
         elif not returnKeyError:
             self.ctx.abortError("nbiMutation for\n{}".format(jsonQuery), 'Key "status" was not found in query response')
 
@@ -58,7 +58,7 @@ class GraphQL(object):
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
         
         response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.ctx.emc_nbi.query(jsonQuery)
-        self.ctx.debug("nbiQuery response = {}", response)
+        self.ctx.debug("nbiQuery response = %s", response)
 
         if response == None:
             return None
@@ -105,8 +105,8 @@ class GraphQL(object):
                 LastNbiError = error
                 return None
             self.ctx.abortError("nbiQuery for \n{}".format(jsonQuery), error)
-        self.ctx.debug("nbiQuery response server = {}", response.headers['server'])
-        self.ctx.debug("nbiQuery response server version = {}", response.headers['server-version'])
+        self.ctx.debug("nbiQuery response server = %s", response.headers['server'])
+        self.ctx.debug("nbiQuery response server version = %s", response.headers['server-version'])
         try:
             jsonResponse = json.loads(response.text)
         except:
@@ -114,7 +114,7 @@ class GraphQL(object):
                 LastNbiError = "JSON decoding failed"
                 return None
             self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), "JSON decoding failed")
-        self.ctx.debug("nbiSessionPost() jsonResponse = {}", jsonResponse)
+        self.ctx.debug("nbiSessionPost() jsonResponse = %s", jsonResponse)
         return jsonResponse
     
     def recursionKeySearch(self, nestedDict, returnKey):
