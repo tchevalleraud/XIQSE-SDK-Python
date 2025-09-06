@@ -46,7 +46,7 @@ class GraphQL(object):
                 return None
             self.ctx.abortError("nbiQuery for \n{}".format(jsonQuery), error)
         self.ctx.debug("nbiQuery response server = {}".format(response.headers['server']))
-        self.ctx.debug(f"nbiQuery response server version = {}".format(response.headers['server-version']))
+        self.ctx.debug("nbiQuery response server version = {}".format(response.headers['server-version']))
         try:
             jsonResponse = json.loads(response.text)
         except:
