@@ -49,6 +49,9 @@ class GraphQL(object):
             LastNbiError = returnMessage
             return False
     
+    def nbiMutationDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
+        return self.nbiMutation(NBI_Dict[key], debugKey, returnKeyError, **kwargs)
+    
     def nbiQuery(self, jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
         global LastNbiError
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
