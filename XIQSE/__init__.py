@@ -78,6 +78,15 @@ class XIQSE(object):
     def getFamily(self):
         return self.Family
     
+    def getVar(self, key, default=None):
+        return self.emc_vars.get(key, default)
+    
+    def getVars(self, keys, default=None):
+        return {key: self.emc_vars.get(key, default) for key in keys}
+    
+    def hasVar(self, key):
+        return key in self.emc_vars
+    
     def log(self, msg, *args):
         self.logger.info(msg, *args)
     
