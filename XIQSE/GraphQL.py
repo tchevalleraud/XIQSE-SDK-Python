@@ -15,8 +15,9 @@ class GraphQL(object):
         global LastNbiError
         jsonQuery = replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
-
-        self.ctx.debug("NBI Query:\n{}\n".format(jsonQuery))
+        
+        response = self.nbiSessionPost(jsonQuery, returnKeyError) if NbiUrl else self.emc_nbi.query(jsonQuery)
+        self.ctx.debug("nbiQuery response = {}".format(response))
         
 
     def nbiQueryDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
