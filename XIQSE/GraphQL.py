@@ -1,6 +1,7 @@
 import json
 import requests
 
+from java.util import LinkedHashMap
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from .Utils.NBIDict import NBI_Dict
@@ -18,6 +19,25 @@ class GraphQL(object):
         
         response = self.nbiSessionPost(jsonQuery, returnKeyError) if self.nbiUrl else self.ctx.emc_nbi.query(jsonQuery)
         self.ctx.debug("nbiQuery response = {}", response)
+
+        if response == None:
+            return None
+        if 'errors' in response:
+            if returnKeyError:
+                LastNbiError = response['errors'][0].message
+                return None
+            self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), response['errors'][0].message)
+        LastNbiError = None
+
+        if returnKey:
+            foundKey, returnValue = recursionKeySearch(response, returnKey)
+            if foundKey:
+                return returnValue
+            if returnKeyError:
+                return None
+            self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), 'Key "{}" was not found in query response'.format(returnKey))
+
+        return response
         
 
     def nbiQueryDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
@@ -56,6 +76,17 @@ class GraphQL(object):
             self.ctx.abortError("nbiQuery for\n{}".format(jsonQuery), "JSON decoding failed")
         self.ctx.debug("nbiSessionPost() jsonResponse = {}", jsonResponse)
         return jsonResponse
+    
+    def recursionKeySearch(self, nestedDict, returnKey):
+        for key, value in nestedDict.iteritems():
+            if key == returnKey:
+                return True, value
+        for key, value in nestedDict.iteritems():
+            if isinstance(value, (dict, LinkedHashMap)):
+                foundKey, foundValue = self.recursionKeySearch(value, returnKey)
+                if foundKey:
+                    return True, foundValue
+            return [None, None]
     
     def replaceKwargs(self, queryString, kwargs):
         for key in kwargs:
