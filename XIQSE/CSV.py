@@ -26,7 +26,8 @@ class CSV(object):
                         key = row.pop(0)
                         if not lookup or key == lookup:
                             csvVarDict[key] = dict(zip(valueKeys, map(str.strip, row)))
-                            csvVarDict['__LOOKUP__'] = key
+                            if lookup:
+                                csvVarDict['__LOOKUP__'] = key
         
         csvVarDict['__INDEX__'] = indexKey
         csvVarDict['__PATH__'] = csvFilePath
