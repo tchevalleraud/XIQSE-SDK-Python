@@ -27,6 +27,24 @@ NBI_Dict = {
             }
         '''
     },
+    'executeWorkflow': {
+        'json': f'''
+            mutation {
+                workflows {
+                    startWorkflow(input:{
+                        path: "<WORKFLOWPATH>",
+                        variables: "<VARIABLES>"
+                    }) {
+                        errorCode
+                        executionId
+                        message
+                        status
+                    }
+                }
+            }
+        ''',
+        'key': 'executionId'
+    },
     'nbiAccess': {
         'json': '''
             query {
