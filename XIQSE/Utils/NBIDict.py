@@ -28,7 +28,7 @@ NBI_Dict = {
         '''
     },
     'executeWorkflow': {
-        'json': f'''
+        'json': '''
             mutation {
                 workflows {
                     startWorkflow(input:{
