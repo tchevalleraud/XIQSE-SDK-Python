@@ -2,6 +2,26 @@ from email import message
 
 
 NBI_Dict = {
+    'configureDiscoveredDevice': {
+        'json': '''
+            mutation {
+                network {
+                    configureDiscoveredDevice(input: {
+                        deviceConfig: {
+                            generalConfig: {
+                                sysName: "<SYSNAME>"
+                                defaultSitePath: "<SITEPATH>"
+                            }
+                            serialNumber: "<SERIALNUMBER>"
+                        }
+                    }) {
+                        message
+                        status
+                    }
+                }
+            }
+        '''
+    },
     'createSitePath': {
         'json': '''
             mutation {
