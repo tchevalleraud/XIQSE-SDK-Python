@@ -55,6 +55,25 @@ NBI_Dict = {
             }
         '''
     },
+    'deleteDevice': {
+        'json': '''
+            mutation {
+                network {
+                    deleteDevices(input: {
+                        devices: [
+                            {
+                                ipAddress: "<IP>"
+                            }
+                        ]
+                        removeData: true
+                    }) {
+                        message
+                        status
+                    }
+                }
+            }
+        '''
+    },
     'executeWorkflow': {
         'json': '''
             mutation {
