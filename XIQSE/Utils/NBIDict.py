@@ -18,7 +18,7 @@ NBI_Dict = {
                                 dnsServer: "<DNSSERVER1>"
                                 dnsServer2: "<DNSSERVER2>"
                                 gatewayAddress: "<GATEWAY>"
-                                mgmtInterface: OUT_OF_BAND
+                                useDiscoveredMode: INTERFACE
                                 subnetAddress: "<SUBNET>"
                             }
                         }
