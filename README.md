@@ -32,3 +32,43 @@ def main():
 
 main()
 ```
+
+### Device GraphQL Example
+
+```python
+from XIQSE import XIQSE
+
+XIQSE = XIQSE(emc_cli, emc_nbi, emc_results, emc_vars)
+
+def main():
+    XIQSE.printHeader(scriptAuthor="Thibault CHEVALLERAUD (Sr. System Engineer / Extreme Networks)")
+    
+    response = XIQSE.GraphQL.nbiQueryDict("nbiAccess")
+    print(response)
+
+main()
+```
+
+### Device CSV Example
+
+```csv
+serial_number,device_name,ip_oob
+SIM0629-0000,EXOS1,10.201.100.141
+SIM27F8-0000,EXOS2,10.201.100.142
+SIMDB79-0000,EXOS3,10.201.100.143
+```
+
+```python
+from XIQSE import XIQSE
+
+XIQSE = XIQSE(emc_cli, emc_nbi, emc_results, emc_vars)
+
+def main():
+    XIQSE.printHeader(scriptAuthor="Thibault CHEVALLERAUD (Sr. System Engineer / Extreme Networks)")
+
+    csv_data = XIQSE.CSV.read('/root/testdata.csv')
+
+    message = XIQSE.CSV.varLookup("$<device_name>", csv_data, "SIM0629-0000")
+
+main()
+```
