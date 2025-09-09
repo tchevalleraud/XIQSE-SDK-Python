@@ -17,7 +17,7 @@ NBI_Dict = {
                             ztpPlusConfig: {
                                 dnsServer: "<DNSSERVER1>"
                                 dnsServer2: "<DNSSERVER2>"
-                                gatewayAdress: "<GATEWAY>"
+                                gatewayAddress: "<GATEWAY>"
                                 mgmtInterface: OUT_OF_BAND
                                 subnetAddress: "<SUBNET>"
                             }
