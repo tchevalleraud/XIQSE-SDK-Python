@@ -16,7 +16,7 @@ NBI_Dict = {
                             serialNumber: "<SERIALNUMBER>"
                             ztpPlusConfig: {
                                 dnsServer: "<DNSSERVER1>"
-                                dnsServer2: "<DNSSERVER2>
+                                dnsServer2: "<DNSSERVER2>"
                                 gatewayAdress: "<GATEWAY>"
                                 mgmtInterface: OUT_OF_BAND
                                 subnetAddress: "<SUBNET>"
