@@ -9,10 +9,18 @@ NBI_Dict = {
                     configureDiscoveredDevice(input: {
                         deviceConfig: {
                             generalConfig: {
-                                sysName: "<SYSNAME>"
+                                adminProfile: "<PROFILE>"
                                 defaultSitePath: "<SITEPATH>"
+                                sysName: "<SYSNAME>"
                             }
                             serialNumber: "<SERIALNUMBER>"
+                            ztpPlusConfig: {
+                                dnsServer: "<DNSSERVER1>"
+                                dnsServer2: "<DNSSERVER2>
+                                gatewayAdress: "<GATEWAY>"
+                                mgmtInterface: <MGMTINTERFACE>
+                                subnetAddress: "<SUBNET>"
+                            }
                         }
                     }) {
                         message
