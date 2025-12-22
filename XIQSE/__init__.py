@@ -139,5 +139,8 @@ class XIQSE(object):
         else:
             self.Family = "unknown"
     
+    def setVar(self, key, value):
+        self.emc_results.put(key, value)
+    
     def warning(self, msg, *args):
         self.logger.warning(msg, *args)
