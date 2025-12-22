@@ -14,15 +14,21 @@ from .Utils.Regex import RegexError, RegexNoError, RegexPrompt
 __version__ = "25.0.0.0-1"
 
 class XIQSE(object):
-    def __init__(self, emc_cli, emc_nbi, emc_results, emc_vars, log_level='INFO', sanity=False):
-        self.logger = Logger(log_level)
-        self.version = __version__
-        self.sanity = sanity
-
+    def __init__(self, emc_cli, emc_nbi, emc_results, emc_vars, log_level=None, sanity=False):
         self.emc_cli = emc_cli
         self.emc_nbi = emc_nbi
         self.emc_results = emc_results
         self.emc_vars = emc_vars
+
+        effective_log_level = (
+            log_level
+            or self.emc_vars.getVar("workflowLogLevel")
+            or "INFO"
+        )
+
+        self.logger = Logger(effective_log_level)
+        self.version = __version__
+        self.sanity = sanity
 
         self.CLI = CLI(self)
         self.CSV = CSV(self)
