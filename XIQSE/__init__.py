@@ -22,7 +22,7 @@ class XIQSE(object):
 
         effective_log_level = (
             log_level
-            or self.emc_vars.getVar("workflowLogLevel")
+            or self.emc_vars.get("workflowLogLevel")
             or "INFO"
         )
 
