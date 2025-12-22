@@ -10,7 +10,7 @@ class CLI(object):
     def __init__(self, context):
         self.ctx = context
     
-    def formatOutputData(data, mode):
+    def formatOutputData(seld, data, mode):
         if not mode                 : value = data
         elif mode == 'bool'         : value = bool(data)
         elif mode == 'str'          : value = str(data[0]) if data else None
@@ -32,7 +32,7 @@ class CLI(object):
             RuntimeError("formatOutputData: invalid scheme type '{}'".format(mode))
         return value
     
-    def parseRegexInput(cmdRegexStr):
+    def parseRegexInput(self, cmdRegexStr):
         if re.match(r'\w+(?:-\w+)?://', cmdRegexStr):
             mode, cmdRegexStr = map(str.strip, cmdRegexStr.split('://', 1))
         else:
