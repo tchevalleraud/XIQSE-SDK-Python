@@ -94,6 +94,9 @@ class XIQSE(object):
     
     def hasVar(self, key):
         return key in self.emc_vars
+        
+    def info(self, msg, *args):
+        self.logger.info(msg, *args)
     
     def log(self, msg, *args):
         self.logger.info(msg, *args)
