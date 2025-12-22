@@ -124,9 +124,6 @@ class CLI(object):
         data = re.findall(regex, outputStr, re.MULTILINE)
         self.ctx.debug("sendCommandRegex() raw data = {}".format(data))
         value = self.formatOutputData(data, mode)
-        if Debug:
-            if debugKey: self.ctx.debug("{} = {}".format(debugKey, value))
-            else: self.ctx.debug("sendCommandRegex OUT = {}".format(value))
         return value
     
     def test(self):
