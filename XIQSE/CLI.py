@@ -29,7 +29,7 @@ class CLI(object):
         elif mode == 'dict-diagonal': value = dict((data[x][x*2],data[x][x*2+1]) for x in range(len(data)))
         elif mode == 'dict-sequence': value = dict((data[x*2][0],data[x*2+1][1]) for x in range(len(data)/2))
         else:
-            #RuntimeError("formatOutputData: invalid scheme type '{}'".format(mode))
+            RuntimeError("formatOutputData: invalid scheme type '{}'".format(mode))
         return value
     
     def parseRegexInput(cmdRegexStr):
