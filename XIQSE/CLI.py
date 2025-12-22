@@ -95,21 +95,38 @@ class CLI(object):
             else:
                 self.ctx.exitError(resultObj.getError())
     
+    def sendCommandShow(cmd, returnCliError=False, msgOnError=None):
+        global LastError
+        resultObj = self.ctx.emc_cli.send(cmd)
+        if resultObj.isSuccess():
+            outputStr = self.ctx.cleanOutput(resultObj.getOutput())
+            if outputStr and self.ctx.cliError("\n".join(outputStr.split("\n")[:4])):
+                if returnCliError:
+                    LastError = outputStr
+                    if msgOnError:
+                        print "==> Ignoring above error: {}\n\n".format(msgOnError)
+                    return None
+                self.ctx.abortError(cmd, outputStr)
+            LastError = None
+            return outputStr
+        else:
+            exitError(resultObj.getError())
+    
     def sendCommandRegex(self, cmdRegexStr, debugKey=None, returnCliError=False, msgOnError=None):
         mode, cmdList, regex = self.parseRegexInput(cmdRegexStr)
         for cmd in cmdList:
             ignoreCliError = True if len(cmdList) > 1 and cmd != cmdList[-1] else returnCliError
-            outputStr = self.sendCommand(cmd, ignoreCliError, msgOnError)
+            outputStr = self.sendCommandShow(cmd, ignoreCliError, msgOnError)
             if outputStr:
                 break
         if not outputStr:
             return None
         data = re.findall(regex, outputStr, re.MULTILINE)
-        self.ctx.debug("sendCLI_showRegex() raw data = {}".format(data))
+        self.ctx.debug("sendCommandRegex() raw data = {}".format(data))
         value = self.formatOutputData(data, mode)
         if Debug:
             if debugKey: self.ctx.debug("{} = {}".format(debugKey, value))
-            else: self.ctx.debug("sendCLI_showRegex OUT = {}".format(value))
+            else: self.ctx.debug("sendCommandRegex OUT = {}".format(value))
         return value
     
     def test(self):
