@@ -95,7 +95,7 @@ class CLI(object):
             else:
                 self.ctx.exitError(resultObj.getError())
     
-    def sendCommandShow(cmd, returnCliError=False, msgOnError=None):
+    def sendCommandShow(self, cmd, returnCliError=False, msgOnError=None):
         global LastError
         resultObj = self.ctx.emc_cli.send(cmd)
         if resultObj.isSuccess():
