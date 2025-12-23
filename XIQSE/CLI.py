@@ -1,5 +1,6 @@
 from .Utils.Regex import RegexContextPatterns, RegexExitInstance
 
+import os
 import re
 
 class CLI(object):
@@ -218,3 +219,13 @@ class CLI(object):
         except Exception as e:
             print "{}: {}".format(type(e).__name__, str(e))
             self.ctx.exitError("Unable to write to TFTP file '{}'".format(TFTPFilePath))
+        
+        success = self.sendCommandChain(TFTPExecute[self.ctx.getFamily()].format(xiqseServerIP, TFTPFileName), returnCliError, msgOnError, waitForPrompt)
+        os.remove(TFTPFilePath)
+        self.ctx.debug("warpBuffer - delete of TFTP config file : {}".format(TFTPFilePath))
+
+        WarpBuffer = []
+        if not success:
+            return False
+        LastError = None
+        return True
