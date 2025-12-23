@@ -199,6 +199,6 @@ class CLI(object):
         if chainStr:
             self.warpBufferAdd(chainStr)
         
-        TFTPEnabled = self.sendCommandRegex(TFTPCheck[self.ctx.getFamily])
+        TFTPEnabled = self.sendCommandRegex(TFTPCheck[self.ctx.getFamily()])
         if not TFTPEnabled:
-            self.sendCommand(TFTPActivate[self.ctx.getFamily])
+            self.sendCommand(TFTPActivate[self.ctx.getFamily()])
