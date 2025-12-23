@@ -10,7 +10,7 @@ class CLI(object):
     def __init__(self, context):
         self.ctx = context
 
-    def configChain(self chainStr):
+    def configChain(self, chainStr):
         chainStr = re.sub(r'\n(\w)(\x0d?\n|\s*;|$)', chr(0) + r'\1\2', chainStr)
         cmdList = map(str.strip, re.split(r'[;\n]', chainStr))
         cmdList = filter(None, cmdList)
