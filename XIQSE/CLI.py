@@ -202,3 +202,19 @@ class CLI(object):
         TFTPEnabled = self.sendCommandRegex(TFTPCheck[self.ctx.getFamily()])
         if not TFTPEnabled:
             self.sendCommand(TFTPActivate[self.ctx.getFamily()])
+            self.warpBufferAdd(TFTPDeactivate[self.ctx.getFamily()])
+        
+        TFTPFileName = userName + '.' + self.ctx.scriptName().replace(' ', '_') + '.' + switchIP.replace('.', '_')
+        TFTPFilePath = xiqseTFTPRoot + '/' + TFTPFileName
+        try:
+            with open(TFTPFilePath, 'w') as f:
+                if self.ctx.getFamily() == "Fabric Engine":
+                    f.write("enable\n")
+                    f.write("config term\n")
+                for cmd in self.WarpBuffer:
+                    f.write(cmd + "\n")
+                f.write("\n")
+                self.ctx.debug("warpBuffer - write of TFTP config file: {}".format(TFTPFilePath))
+        except Exception as e:
+            print "{}: {}".format(type(e).__name__, str(e))
+            self.ctx.exitError("Unable to write to TFTP file '{}'".format(TFTPFilePath))
