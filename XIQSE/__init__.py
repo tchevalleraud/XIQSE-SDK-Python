@@ -138,7 +138,10 @@ class XIQSE(object):
             self.Family = FamilyChildren[self.emc_vars["deviceType"]]
         else:
             self.Family = "unknown"
-    
+
+    def setIpAddress(self, ip):
+        self.emc_cli.setIpAddress(ip)
+
     def setVar(self, key, value):
         self.emc_results.put(key, value)
     
