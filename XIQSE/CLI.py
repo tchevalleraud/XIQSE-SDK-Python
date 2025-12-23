@@ -168,7 +168,7 @@ class CLI(object):
         cmdList = self.configChain(chainStr)
         for cmd in cmdList:
             cmdAdd = re.sub(r'\n.+$', '', cmd)
-            WarpBuffer.append(cmdAdd)
+            self.WarpBuffer.append(cmdAdd)
     
     def warpBufferExecute(self, chainStr=None, returnCliError=False, msgOnError=None, waitForPrompt=True):
         global LastError
