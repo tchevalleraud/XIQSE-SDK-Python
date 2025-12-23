@@ -6,6 +6,7 @@ class CLI(object):
 
     CommandHistory = []
     Indent = 3
+    WarpBuffer = []
 
     def __init__(self, context):
         self.ctx = context
@@ -161,3 +162,43 @@ class CLI(object):
         print(self.ctx.emc_vars)
         print("============================")
         print(self.ctx.emc_cli.getUser())
+    
+    def warpBufferAdd(self, chainStr):
+        global WarpBuffer
+        cmdList = self.configChain(chainStr)
+        for cmd in cmdList:
+            cmdAdd = re.sub(r'\n.+$', '', cmd)
+            WarpBuffer.append(cmdAdd)
+    
+    def warpBufferExecute(self, chainStr=None, returnCliError=False, msgOnError=None, waitForPrompt=True):
+        global LastError
+        global WarpBuffer
+        xiqseTFTPRoot = '/tftpboot'
+        xiqseServerIP = self.ctx.getVar("serverIP")
+        switchIP = self.ctx.getVar("deviceIP")
+        userName = self.ctx.getVar("userName").replace('.', '_')
+        TFTPCheck = {
+            'Fabric Engine': 'bool://show boot config flags||^flags tftpd true',
+            'Summit Series': 'bool://show process tftpd||Ready',
+            'ERS Series':    True,
+        }
+        TFTPActivate = {
+            'Fabric Engine': 'boot config flags tftpd',
+            'Summit Series': 'start process tftpd',
+        }
+        TFTPDeactivate = {
+            'Fabric Engine': 'no boot config flags tftpd',
+            'Summit Series': 'terminate process tftpd graceful',
+        }
+        TFTPExecute = {
+            'Fabric Engine': 'copy "{0}:{1}" /intflash/.script.src -y; source .script.src debug',
+            'Summit Series': 'tftp get {0} "{1}" .script.xsf; run script .script.xsf',
+            'ERS Series':    'configure network address {0} filename "{1}"',
+        }
+
+        if chainStr:
+            self.warpBufferAdd(chainStr)
+        
+        TFTPEnabled = self.sendCommandRegex(TFTPCheck[self.ctx.getFamily])
+        if not TFTPEnabled:
+            self.sendCommand(TFTPActivate[self.ctx.getFamily])
