@@ -9,6 +9,13 @@ class CLI(object):
 
     def __init__(self, context):
         self.ctx = context
+
+    def configChain(self chainStr):
+        chainStr = re.sub(r'\n(\w)(\x0d?\n|\s*;|$)', chr(0) + r'\1\2', chainStr)
+        cmdList = map(str.strip, re.split(r'[;\n]', chainStr))
+        cmdList = filter(None, cmdList)
+        cmdList = [re.sub(r'\x00(\w)(\x0d?\n|$)', r'\n\1\2', x) for x in cmdList]
+        return cmdList
     
     def formatOutputData(seld, data, mode):
         if not mode                 : value = data
@@ -94,6 +101,26 @@ class CLI(object):
                 return True
             else:
                 self.ctx.exitError(resultObj.getError())
+    
+    def sendCommandChain(self, chainStr, returnCliError=False, msgOnError=None, waitForPrompt=True, abortOnError=True):
+        cmdList = self.configChain(chainStr)
+        successStatus = True
+        for cmd in cmdList[:-1]: # All but last
+            embedded = re.match(r'^#error +(fail|stop|continue) *$', cmd)
+            if embedded:
+                errorMode = embedded.group(1)
+                returnCliError = False if errorMode == 'fail' else True
+                abortOnError = True if errorMode == 'stop' else False
+                continue
+            success = self.sendCommand(cmd, returnCliError, msgOnError)
+            if not success:
+                successStatus = False
+                if abortOnError:
+                    return False
+        success = self.sendCommand(cmdList[-1], returnCliError, msgOnError, waitForPrompt)
+        if not success:
+            return False
+        return successStatus
     
     def sendCommandShow(self, cmd, returnCliError=False, msgOnError=None):
         global LastError
