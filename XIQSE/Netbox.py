@@ -119,16 +119,23 @@ class Netbox(object):
             return None
         return device.get('name')
 
-    def getCustomFields(self, device):
+    def getCustomFields(self, device, key=None):
         """
         Extract the custom fields from the device dictionary.
         
         Args:
             device (dict): The device dictionary returned by getDeviceBySerial.
+            key (str, optional): The specific custom field key to retrieve.
             
         Returns:
-            dict: The custom fields dictionary if found, else empty dict.
+            dict or str: The custom fields dictionary or specific value if found, else empty dict or None.
         """
         if not device:
-            return {}
-        return device.get('custom_fields', {})
+            return {} if key is None else None
+            
+        custom_fields = device.get('custom_fields', {})
+        
+        if key:
+            return custom_fields.get(key)
+        
+        return custom_fields
