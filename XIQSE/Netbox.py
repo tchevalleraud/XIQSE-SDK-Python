@@ -81,3 +81,54 @@ class Netbox(object):
         except ValueError as e:
             self.ctx.log("Error decoding JSON response: {}".format(e))
             return None
+
+    def getOobIp(self, device, with_mask=False):
+        """
+        Extract the OOB IP address from the device dictionary.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            with_mask (bool): Whether to include the subnet mask (CIDR) in the return value.
+            
+        Returns:
+            str: The OOB IP address (with or without mask) if found, else None.
+        """
+        if not device or 'oob_ip' not in device or not device['oob_ip']:
+            return None
+            
+        ip_cidr = device['oob_ip'].get('address')
+        if not ip_cidr:
+            return None
+            
+        if with_mask:
+            return ip_cidr
+        else:
+            return ip_cidr.split('/')[0]
+
+    def getName(self, device):
+        """
+        Extract the name from the device dictionary.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            
+        Returns:
+            str: The name of the device if found, else None.
+        """
+        if not device:
+            return None
+        return device.get('name')
+
+    def getCustomFields(self, device):
+        """
+        Extract the custom fields from the device dictionary.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            
+        Returns:
+            dict: The custom fields dictionary if found, else empty dict.
+        """
+        if not device:
+            return {}
+        return device.get('custom_fields', {})
