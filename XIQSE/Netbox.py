@@ -178,3 +178,41 @@ class Netbox(object):
             return site_custom_fields.get(key)
         
         return site_custom_fields
+
+    def updateDeviceStatus(self, device, status):
+        """
+        Update the status of a device.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            status (str): The new status value (e.g., 'active', 'planned', 'offline').
+            
+        Returns:
+            bool: True if the update was successful, False otherwise.
+        """
+        if not self.session:
+            self.ctx.log("Netbox session not initialized. Please call connect() first.")
+            return False
+            
+        if not device or 'id' not in device:
+            self.ctx.log("Invalid device object provided.")
+            return False
+            
+        device_id = device['id']
+        try:
+            api_url = "{}/api/dcim/devices/{}/".format(self.url, device_id)
+            payload = {'status': status}
+            
+            self.ctx.debug("Updating device {} status to {}".format(device_id, status))
+            
+            response = self.session.patch(api_url, json=payload)
+            response.raise_for_status()
+            
+            self.ctx.log("Successfully updated device {} status to {}".format(device.get('name', device_id), status))
+            return True
+            
+        except requests.exceptions.RequestException as e:
+            self.ctx.log("Failed to update device status: {}".format(e))
+            if hasattr(e, 'response') and e.response is not None:
+                self.ctx.log("Response content: {}".format(e.response.text))
+            return False
