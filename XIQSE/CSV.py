@@ -4,11 +4,37 @@ import re
 import json
 
 class CSV(object):
+    """
+    Class for handling CSV file operations.
+    
+    This class provides methods to read CSV files into dictionaries and perform
+    variable lookups and replacements based on the CSV data.
+    """
 
     def __init__(self, context):
+        """
+        Initialize the CSV object.
+
+        Args:
+            context: The XIQSE context object.
+        """
         self.ctx = context
     
     def read(self, csvFilePath, lookup=None, delimiter=','):
+        """
+        Read a CSV file into a dictionary.
+
+        Args:
+            csvFilePath (str): The path to the CSV file.
+            lookup (str, optional): A specific key to filter the results. Defaults to None.
+            delimiter (str, optional): The CSV delimiter. Defaults to ','.
+
+        Returns:
+            dict: A dictionary representing the CSV data.
+        
+        Raises:
+            RuntimeError: If the CSV file is not found.
+        """
         if not os.path.exists(csvFilePath):
             self.ctx.exitError("readCsvToDict: CSV file {} not found!".format(csvFilePath))
         
@@ -37,6 +63,20 @@ class CSV(object):
         return csvVarDict
 
     def varLookup(self, inputStr, csvVarDict, lookup):
+        """
+        Replace variables in a string with values from the CSV dictionary.
+
+        Args:
+            inputStr (str): The input string containing variables (e.g., $<var> or $(var)).
+            csvVarDict (dict): The dictionary containing CSV data.
+            lookup (str): The lookup key to use in the CSV dictionary.
+
+        Returns:
+            str: The string with variables replaced by their values.
+
+        Raises:
+            RuntimeError: If a variable is not found in the CSV data.
+        """
         csvVarsUsed = {x.group(1):1 for x in list(re.finditer(r'\$<([\w -]+)>', inputStr)) + list(re.finditer(r'\$\(([\w -]+)\)', inputStr))}
         outputStr = inputStr
         
@@ -64,4 +104,7 @@ class CSV(object):
         return outputStr
     
     def test(self):
+        """
+        Test the CSV module.
+        """
         self.ctx.debug("XIQSE.CSV.test => OK")

@@ -8,11 +8,36 @@ from .Utils.NBIDict import NBI_Dict
 
 
 class GraphQL(object):
+    """
+    Class for handling GraphQL queries and mutations to the NBI (Northbound Interface).
+    
+    This class provides methods to execute queries and mutations, handle recursion
+    for finding specific keys or status messages, and manage NBI sessions.
+    """
+
     def __init__(self, context):
+        """
+        Initialize the GraphQL object.
+
+        Args:
+            context: The XIQSE context object.
+        """
         self.ctx = context
         self.nbiUrl = None
     
     def nbiMutation(self, jsonQueryDict, returnKeyError=False, debugKey=None, **kwargs):
+        """
+        Execute an NBI mutation.
+
+        Args:
+            jsonQueryDict (dict): Dictionary containing the mutation query and optional return key.
+            returnKeyError (bool, optional): Whether to return None/False on error instead of aborting. Defaults to False.
+            debugKey (str, optional): Debug key (unused). Defaults to None.
+            **kwargs: Arguments to replace placeholders in the query string.
+
+        Returns:
+            any: The result of the mutation (value of the return key or boolean success status).
+        """
         global LastNbiError
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
@@ -50,9 +75,33 @@ class GraphQL(object):
             return False
     
     def nbiMutationDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
+        """
+        Execute an NBI mutation using a predefined query from NBI_Dict.
+
+        Args:
+            key (str): The key in NBI_Dict to retrieve the query.
+            debugKey (str, optional): Debug key (unused). Defaults to None.
+            returnKeyError (bool, optional): Whether to return None/False on error. Defaults to False.
+            **kwargs: Arguments to replace placeholders in the query string.
+
+        Returns:
+            any: The result of the mutation.
+        """
         return self.nbiMutation(NBI_Dict[key], debugKey, returnKeyError, **kwargs)
     
     def nbiQuery(self, jsonQueryDict, debugKey=None, returnKeyError=False, **kwargs):
+        """
+        Execute an NBI query.
+
+        Args:
+            jsonQueryDict (dict): Dictionary containing the query and optional return key.
+            debugKey (str, optional): Debug key (unused). Defaults to None.
+            returnKeyError (bool, optional): Whether to return None on error instead of aborting. Defaults to False.
+            **kwargs: Arguments to replace placeholders in the query string.
+
+        Returns:
+            any: The result of the query (full response or value of the return key).
+        """
         global LastNbiError
         jsonQuery = self.replaceKwargs(jsonQueryDict['json'], kwargs)
         returnKey = jsonQueryDict['key'] if 'key' in jsonQueryDict else None
@@ -81,9 +130,31 @@ class GraphQL(object):
         
 
     def nbiQueryDict(self, key, debugKey=None, returnKeyError=False, **kwargs):
+        """
+        Execute an NBI query using a predefined query from NBI_Dict.
+
+        Args:
+            key (str): The key in NBI_Dict to retrieve the query.
+            debugKey (str, optional): Debug key (unused). Defaults to None.
+            returnKeyError (bool, optional): Whether to return None on error. Defaults to False.
+            **kwargs: Arguments to replace placeholders in the query string.
+
+        Returns:
+            any: The result of the query.
+        """
         return self.nbiQuery(NBI_Dict[key], debugKey, returnKeyError, **kwargs)
 
     def nbiSessionPost(self, jsonQuery, returnKeyError=False):
+        """
+        Send a POST request to the NBI URL.
+
+        Args:
+            jsonQuery (str): The JSON query string.
+            returnKeyError (bool, optional): Whether to return None on error instead of aborting. Defaults to False.
+
+        Returns:
+            dict: The JSON response.
+        """
         global LastNbiError
         session = requests.Session()
         session.verify = False
@@ -118,6 +189,16 @@ class GraphQL(object):
         return jsonResponse
     
     def recursionKeySearch(self, nestedDict, returnKey):
+        """
+        Recursively search for a key in a nested dictionary.
+
+        Args:
+            nestedDict (dict): The dictionary to search.
+            returnKey (str): The key to find.
+
+        Returns:
+            tuple: (True, value) if found, else [None, None].
+        """
         for key, value in nestedDict.iteritems():
             if key == returnKey:
                 return True, value
@@ -129,6 +210,15 @@ class GraphQL(object):
             return [None, None]
     
     def recursionStatusSearch(self, nestedDict):
+        """
+        Recursively search for a 'status' key in a nested dictionary.
+
+        Args:
+            nestedDict (dict): The dictionary to search.
+
+        Returns:
+            tuple: (True, status_value, message_value) if found, else [None, None, None].
+        """
         for key, value in nestedDict.iteritems():
             if key == 'status':
                 if 'message' in nestedDict:
@@ -143,10 +233,23 @@ class GraphQL(object):
             return [None, None, None]
     
     def replaceKwargs(self, queryString, kwargs):
+        """
+        Replace placeholders in a query string with provided keyword arguments.
+
+        Args:
+            queryString (str): The query string with placeholders (e.g., <key>).
+            kwargs (dict): The dictionary of replacement values.
+
+        Returns:
+            str: The query string with replacements.
+        """
         for key in kwargs:
             replaceValue = str(kwargs[key]).lower() if type(kwargs[key]) == bool else str(kwargs[key])
             queryString = queryString.replace('<'+key+'>', replaceValue)
         return queryString
     
     def test(self):
+        """
+        Test the GraphQL module.
+        """
         self.ctx.log("XIQSE.GraphQL.test => OK")

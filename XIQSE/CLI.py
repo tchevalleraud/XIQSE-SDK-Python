@@ -4,22 +4,57 @@ import os
 import re
 
 class CLI(object):
+    """
+    Class for handling CLI interactions with devices.
+    
+    This class manages command execution, output parsing, and TFTP operations.
+    It supports command chains, regex-based parsing, and a "warp buffer" for
+    batching commands via TFTP.
+    """
 
     CommandHistory = []
     Indent = 3
     WarpBuffer = []
 
     def __init__(self, context):
+        """
+        Initialize the CLI object.
+
+        Args:
+            context: The XIQSE context object.
+        """
         self.ctx = context
 
     def configChain(self, chainStr):
+        """
+        Parse a command chain string into a list of commands.
+
+        Args:
+            chainStr (str): The command chain string (commands separated by ';' or newline).
+
+        Returns:
+            list: A list of individual commands.
+        """
         chainStr = re.sub(r'\n(\w)(\x0d?\n|\s*;|$)', chr(0) + r'\1\2', chainStr)
         cmdList = map(str.strip, re.split(r'[;\n]', chainStr))
         cmdList = filter(None, cmdList)
         cmdList = [re.sub(r'\x00(\w)(\x0d?\n|$)', r'\n\1\2', x) for x in cmdList]
         return cmdList
     
-    def formatOutputData(seld, data, mode):
+    def formatOutputData(self, data, mode):
+        """
+        Format the output data based on the specified mode.
+
+        Args:
+            data (list): The raw data extracted from the output.
+            mode (str): The formatting mode (e.g., 'bool', 'str', 'int', 'list', 'dict').
+
+        Returns:
+            any: The formatted data.
+
+        Raises:
+            RuntimeError: If an invalid scheme type is provided.
+        """
         if not mode                 : value = data
         elif mode == 'bool'         : value = bool(data)
         elif mode == 'str'          : value = str(data[0]) if data else None
@@ -42,6 +77,15 @@ class CLI(object):
         return value
     
     def parseRegexInput(self, cmdRegexStr):
+        """
+        Parse a regex command string.
+
+        Args:
+            cmdRegexStr (str): The regex command string (format: mode://cmd||regex).
+
+        Returns:
+            tuple: A tuple containing (mode, cmdList, regex).
+        """
         if re.match(r'\w+(?:-\w+)?://', cmdRegexStr):
             mode, cmdRegexStr = map(str.strip, cmdRegexStr.split('://', 1))
         else:
@@ -51,6 +95,9 @@ class CLI(object):
         return mode, cmdList, regex
     
     def printSummary(self):
+        """
+        Print a summary of the executed commands.
+        """
         Family = "Fabric Engine"
         if not len(self.CommandHistory):
             self.ctx.log("No command was performed")
@@ -75,6 +122,18 @@ class CLI(object):
         self.CommandHistory = []
 
     def sendCommand(self, cmd, returnCliError=False, msgOnError=None, waitForPrompt=True):
+        """
+        Send a command to the device.
+
+        Args:
+            cmd (str): The command to send.
+            returnCliError (bool, optional): Whether to return False on error instead of aborting. Defaults to False.
+            msgOnError (str, optional): Message to log if an error occurs (when returnCliError is True). Defaults to None.
+            waitForPrompt (bool, optional): Whether to wait for the command prompt. Defaults to True.
+
+        Returns:
+            bool: True if the command was successful, False otherwise.
+        """
         global LastError
         cmd = re.sub(r':\/\/', ':' + chr(0) + chr(0), cmd)
         cmd = re.sub(r' *\/\/ *', r'\n', cmd)
@@ -105,6 +164,19 @@ class CLI(object):
                 self.ctx.exitError(resultObj.getError())
     
     def sendCommandChain(self, chainStr, returnCliError=False, msgOnError=None, waitForPrompt=True, abortOnError=True):
+        """
+        Send a chain of commands to the device.
+
+        Args:
+            chainStr (str): The command chain string.
+            returnCliError (bool, optional): Whether to return False on error instead of aborting. Defaults to False.
+            msgOnError (str, optional): Message to log if an error occurs. Defaults to None.
+            waitForPrompt (bool, optional): Whether to wait for the command prompt. Defaults to True.
+            abortOnError (bool, optional): Whether to stop execution of the chain on error. Defaults to True.
+
+        Returns:
+            bool: True if all commands were successful (or handled), False otherwise.
+        """
         cmdList = self.configChain(chainStr)
         successStatus = True
         for cmd in cmdList[:-1]: # All but last
@@ -125,6 +197,17 @@ class CLI(object):
         return successStatus
     
     def sendCommandShow(self, cmd, returnCliError=False, msgOnError=None):
+        """
+        Send a show command and return the output.
+
+        Args:
+            cmd (str): The show command.
+            returnCliError (bool, optional): Whether to return None on error instead of aborting. Defaults to False.
+            msgOnError (str, optional): Message to log if an error occurs. Defaults to None.
+
+        Returns:
+            str: The command output if successful, else None.
+        """
         global LastError
         resultObj = self.ctx.emc_cli.send(cmd)
         if resultObj.isSuccess():
@@ -139,9 +222,21 @@ class CLI(object):
             LastError = None
             return outputStr
         else:
-            exitError(resultObj.getError())
+            self.ctx.exitError(resultObj.getError())
     
     def sendCommandRegex(self, cmdRegexStr, debugKey=None, returnCliError=False, msgOnError=None):
+        """
+        Send a command and parse the output using regex.
+
+        Args:
+            cmdRegexStr (str): The regex command string.
+            debugKey (str, optional): Debug key (unused). Defaults to None.
+            returnCliError (bool, optional): Whether to return None on error instead of aborting. Defaults to False.
+            msgOnError (str, optional): Message to log if an error occurs. Defaults to None.
+
+        Returns:
+            any: The parsed and formatted data.
+        """
         mode, cmdList, regex = self.parseRegexInput(cmdRegexStr)
         for cmd in cmdList:
             ignoreCliError = True if len(cmdList) > 1 and cmd != cmdList[-1] else returnCliError
@@ -156,15 +251,27 @@ class CLI(object):
         return value
     
     def test(self):
+        """
+        Test the CLI module.
+        """
         self.ctx.debug("XIQSE.CLI.test => OK")
     
     def testDebug(self):
+        """
+        Print debug information about the environment.
+        """
         print("Test Debug")
         print(self.ctx.emc_vars)
         print("============================")
         print(self.ctx.emc_cli.getUser())
     
     def warpBufferAdd(self, chainStr):
+        """
+        Add commands to the warp buffer.
+
+        Args:
+            chainStr (str): The command chain string to add.
+        """
         global WarpBuffer
         cmdList = self.configChain(chainStr)
         for cmd in cmdList:
@@ -172,6 +279,18 @@ class CLI(object):
             self.WarpBuffer.append(cmdAdd)
     
     def warpBufferExecute(self, chainStr=None, returnCliError=False, msgOnError=None, waitForPrompt=True):
+        """
+        Execute the commands in the warp buffer via TFTP.
+
+        Args:
+            chainStr (str, optional): Additional commands to add before execution. Defaults to None.
+            returnCliError (bool, optional): Whether to return False on error. Defaults to False.
+            msgOnError (str, optional): Message to log on error. Defaults to None.
+            waitForPrompt (bool, optional): Whether to wait for prompt. Defaults to True.
+
+        Returns:
+            bool: True if execution was successful, False otherwise.
+        """
         global LastError
         global WarpBuffer
         xiqseTFTPRoot = '/tftpboot'
