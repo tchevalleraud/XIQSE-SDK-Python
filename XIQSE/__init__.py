@@ -6,6 +6,7 @@ from .CSV import CSV
 from .GraphQL import GraphQL
 from .OS import OS
 from .SNMP import SNMP
+from .Netbox import Netbox
 
 from .Utils.Family import FamilyChildren
 from .Utils.Logger import Logger
@@ -35,6 +36,7 @@ class XIQSE(object):
         self.GraphQL = GraphQL(self)
         self.OS = OS(self)
         self.SNMP = SNMP(self)
+        self.Netbox = Netbox(self)
 
         self.Family = None
         self.setFamily()
