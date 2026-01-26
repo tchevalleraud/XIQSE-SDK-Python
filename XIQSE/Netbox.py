@@ -69,6 +69,24 @@ class Netbox(object):
             if data.get('count', 0) > 0:
                 # Return the first match
                 device = data['results'][0]
+                
+                # Fetch full site details if site exists
+                if device.get('site') and device['site'].get('id'):
+                    try:
+                        site_id = device['site']['id']
+                        site_api_url = "{}/api/dcim/sites/{}/".format(self.url, site_id)
+                        self.ctx.debug("Querying Netbox Site: {}".format(site_api_url))
+                        
+                        site_response = self.session.get(site_api_url)
+                        site_response.raise_for_status()
+                        site_data = site_response.json()
+                        
+                        # Merge full site data into device['site']
+                        device['site'] = site_data
+                        self.ctx.debug("Site details merged for site ID: {}".format(site_id))
+                    except requests.exceptions.RequestException as e:
+                        self.ctx.log("Warning: Failed to fetch full site details: {}".format(e))
+                
                 self.ctx.log("Device found: {} (ID: {})".format(device.get('name'), device.get('id')))
                 return device
             else:
@@ -139,3 +157,24 @@ class Netbox(object):
             return custom_fields.get(key)
         
         return custom_fields
+
+    def getSiteCustomFields(self, device, key=None):
+        """
+        Extract the custom fields from the device's site dictionary.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            key (str, optional): The specific custom field key to retrieve.
+            
+        Returns:
+            dict or str: The site custom fields dictionary or specific value if found, else empty dict or None.
+        """
+        if not device or 'site' not in device or not device['site']:
+            return {} if key is None else None
+            
+        site_custom_fields = device['site'].get('custom_fields', {})
+        
+        if key:
+            return site_custom_fields.get(key)
+        
+        return site_custom_fields
