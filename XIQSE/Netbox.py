@@ -11,6 +11,7 @@ class Netbox(object):
         self.url = None
         self.token = None
         self.session = None
+        self.region_cache = {}
 
     def connect(self, url, token, verify=False):
         """
@@ -216,3 +217,61 @@ class Netbox(object):
             if hasattr(e, 'response') and e.response is not None:
                 self.ctx.log("Response content: {}".format(e.response.text))
             return False
+
+    def getSiteRegionPath(self, device):
+        """
+        Get the full region path for the device's site.
+        
+        Args:
+            device (dict): The device dictionary.
+            
+        Returns:
+            str: The full region path (e.g., "/World/Root/Region/Site").
+        """
+        if not device or 'site' not in device or not device['site']:
+            return None
+            
+        site = device['site']
+        path = [site['name']]
+        
+        if not site.get('region'):
+             return "/World/" + site['name']
+
+        region_id = site['region']['id']
+        
+        # Traverse up the region hierarchy
+        while region_id:
+            # Check cache first
+            if region_id in self.region_cache:
+                region_data = self.region_cache[region_id]
+                path.insert(0, region_data['name'])
+                if region_data.get('parent'):
+                    region_id = region_data['parent']['id']
+                else:
+                    region_id = None
+                continue
+
+            try:
+                api_url = "{}/api/dcim/regions/{}/".format(self.url, region_id)
+                self.ctx.debug("Querying Netbox Region: {}".format(api_url))
+                
+                response = self.session.get(api_url)
+                response.raise_for_status()
+                region_data = response.json()
+                
+                # Cache the region data
+                self.region_cache[region_id] = region_data
+                
+                path.insert(0, region_data['name'])
+                
+                if region_data.get('parent'):
+                    region_id = region_data['parent']['id']
+                else:
+                    region_id = None
+                    
+            except requests.exceptions.RequestException as e:
+                self.ctx.log("Error fetching region details: {}".format(e))
+                break
+                
+        path.insert(0, "World")
+        return "/" + "/".join(path)
