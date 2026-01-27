@@ -34,7 +34,7 @@ NBI_Dict = {
         'json': '''
             mutation {
                 network {
-                    createDevice(input: {
+                    createDevices(input: {
                         devices: {
                             ipAddress: "<IP>"
                             siteLocation: "<SITEPATH>"
