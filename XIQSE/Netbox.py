@@ -315,9 +315,9 @@ class Netbox(object):
             prefixes.sort(key=lambda p: int(p['prefix'].split('/')[1]), reverse=True)
             best_prefix = prefixes[0]['prefix']
             
-            # 2. Search for gateway IP in this prefix with the tag
-            # Note: 'parent' parameter filters for IPs within the prefix
-            ip_url = "{}/api/ipam/ip-addresses/?parent={}&tag={}".format(self.url, best_prefix, tag)
+            # 2. Search for all IPs in this prefix
+            # We don't filter by tag in the API call because it might not work as expected
+            ip_url = "{}/api/ipam/ip-addresses/?parent={}".format(self.url, best_prefix)
             self.ctx.debug("Searching for gateway in {}: {}".format(best_prefix, ip_url))
             
             response = self.session.get(ip_url)
@@ -325,10 +325,17 @@ class Netbox(object):
             ip_data = response.json()
             
             if ip_data.get('count', 0) > 0:
-                gateway_ip = ip_data['results'][0]['address']
-                return gateway_ip.split('/')[0]
-            else:
+                for ip in ip_data['results']:
+                    # Check tags
+                    for t in ip.get('tags', []):
+                        if t.get('slug') == tag or t.get('name') == tag:
+                             gateway_ip = ip['address']
+                             return gateway_ip.split('/')[0]
+                
                 self.ctx.log("No gateway found in prefix {} with tag {}".format(best_prefix, tag))
+                return None
+            else:
+                self.ctx.log("No IPs found in prefix {}".format(best_prefix))
                 return None
                 
         except requests.exceptions.RequestException as e:
