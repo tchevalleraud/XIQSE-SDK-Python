@@ -38,7 +38,7 @@ NBI_Dict = {
                         devices: {
                             ipAddress: "<IP>"
                             siteLocation: "<SITEPATH>"
-                            profileNAme: "<PROFILE>"
+                            profileName: "<PROFILE>"
                         }
                     }) {
                         message
