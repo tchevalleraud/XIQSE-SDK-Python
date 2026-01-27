@@ -1,3 +1,4 @@
+import os
 import re
 import time
 
@@ -316,3 +317,53 @@ class XIQSE(object):
             *args: Arguments for the format string.
         """
         self.logger.warning(msg, *args)
+
+    def pingIp(self, ip, timeout=30, interval=2):
+        """
+        Ping an IP address until it responds or the timeout is reached.
+
+        Args:
+            ip (str): The IP address to ping.
+            timeout (int, optional): The maximum time to wait for a response in seconds. Defaults to 30.
+            interval (int, optional): The time to wait between pings in seconds. Defaults to 2.
+
+        Returns:
+            bool: True if the IP responds within the timeout, False otherwise.
+        """
+        self.log("Waiting up to {} secs for IP {} to reply to ping".format(timeout, ip))
+        
+        if self.sanity:
+            self.log("Sanity mode enabled: skipping actual ping, returning True")
+            return True
+
+        startTime = time.time()
+        remainingTime = timeout
+        
+        while remainingTime >= 0:
+            timeBeforePing = time.time()
+            
+            # Use appropriate ping command based on OS (assuming Linux/XIQ-SE environment based on user snippet)
+            # -c 1: count 1
+            # -W 1: wait 1 second for response (to keep loop responsive)
+            cmd = "ping -c 1 -W 1 {}".format(ip)
+            self.debug("Executing: {}".format(cmd))
+            
+            response = os.system(cmd)
+            
+            pingTime = time.time() - timeBeforePing
+            
+            if response == 0:
+                self.log("Reply from {}".format(ip))
+                return True
+                
+            # Wait consistent delay till next ping
+            sleepTime = interval - pingTime
+            if sleepTime > 0:
+                time.sleep(sleepTime)
+                
+            remainingTime = timeout - (time.time() - startTime)
+            if remainingTime > 0:
+                self.debug("Ping failed, remaining timeout {} secs".format(int(remainingTime)))
+                
+        self.log("Timeout reached. IP {} did not respond within {} seconds".format(ip, timeout))
+        return False
