@@ -30,6 +30,24 @@ NBI_Dict = {
             }
         '''
     },
+    'createDevice': {
+        'json': '''
+            mutation {
+                network {
+                    createDevice(input: {
+                        devices: {
+                            ipAddress: "<IP>"
+                            siteLocation: "<SITEPATH>"
+                            profileNAme: "<PROFILE>"
+                        }
+                    }) {
+                        message
+                        status
+                    }
+                }
+            }
+        '''
+    },
     'createSitePath': {
         'json': '''
             mutation {

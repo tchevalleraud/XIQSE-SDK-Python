@@ -124,6 +124,15 @@ class XIQSE(object):
         else:
             return False
     
+    def close(self):
+        """
+        Close underlying EMC CLI connections and resources.
+
+        This should be called at the end of the workflow to ensure that
+        any open CLI sessions are properly terminated.
+        """
+        self.emc_cli.close()
+    
     def debug(self, msg, *args):
         """
         Log a debug message.
