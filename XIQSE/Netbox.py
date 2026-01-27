@@ -275,3 +275,65 @@ class Netbox(object):
                 
         path.insert(0, "World")
         return "/" + "/".join(path)
+
+    def getGatewayFromIp(self, ip_address, tag):
+        """
+        Find the gateway IP for the subnet of the provided IP address, identified by a specific tag.
+        
+        Args:
+            ip_address (str): The IP address (with or without CIDR).
+            tag (str): The slug of the tag identifying the gateway.
+            
+        Returns:
+            str: The gateway IP address (without mask) if found, else None.
+        """
+        if not self.session:
+            self.ctx.log("Netbox session not initialized. Please call connect() first.")
+            return None
+            
+        if not ip_address or not tag:
+            return None
+            
+        # Clean IP (remove CIDR)
+        clean_ip = ip_address.split('/')[0]
+        
+        try:
+            # 1. Find the parent prefix
+            prefix_url = "{}/api/ipam/prefixes/?contains={}".format(self.url, clean_ip)
+            self.ctx.debug("Finding parent prefix for IP {}: {}".format(clean_ip, prefix_url))
+            
+            response = self.session.get(prefix_url)
+            response.raise_for_status()
+            data = response.json()
+            
+            if data.get('count', 0) == 0:
+                self.ctx.log("No parent prefix found for IP {}".format(clean_ip))
+                return None
+                
+            # Sort prefixes by length (longest match first)
+            prefixes = data['results']
+            prefixes.sort(key=lambda p: int(p['prefix'].split('/')[1]), reverse=True)
+            best_prefix = prefixes[0]['prefix']
+            
+            # 2. Search for gateway IP in this prefix with the tag
+            # Note: 'parent' parameter filters for IPs within the prefix
+            ip_url = "{}/api/ipam/ip-addresses/?parent={}&tag={}".format(self.url, best_prefix, tag)
+            self.ctx.debug("Searching for gateway in {}: {}".format(best_prefix, ip_url))
+            
+            response = self.session.get(ip_url)
+            response.raise_for_status()
+            ip_data = response.json()
+            
+            if ip_data.get('count', 0) > 0:
+                gateway_ip = ip_data['results'][0]['address']
+                return gateway_ip.split('/')[0]
+            else:
+                self.ctx.log("No gateway found in prefix {} with tag {}".format(best_prefix, tag))
+                return None
+                
+        except requests.exceptions.RequestException as e:
+            self.ctx.log("Error finding gateway: {}".format(e))
+            return None
+        except (ValueError, IndexError) as e:
+            self.ctx.log("Error processing gateway response: {}".format(e))
+            return None
