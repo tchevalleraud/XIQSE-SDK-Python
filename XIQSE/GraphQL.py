@@ -268,9 +268,14 @@ class GraphQL(object):
             device = self.nbiQueryDict('checkDevice', IP=ip, returnKeyError=True)
             
             # Check if we got a valid response and the device is UP (down == False)
-            if device and isinstance(device, dict) and device.get('down') is False:
-                self.ctx.debug("checkDevice: IP {} is UP".format(ip))
-                return True
+            # We use str().lower() == 'false' to handle both Python boolean False and Java Boolean/String 'false'
+            if device:
+                down_val = device.get('down')
+                self.ctx.debug("checkDevice: IP {} status 'down' = {} (type: {})".format(ip, down_val, type(down_val)))
+                
+                if str(down_val).lower() == 'false':
+                    self.ctx.debug("checkDevice: IP {} is UP".format(ip))
+                    return True
             
             self.ctx.debug("checkDevice: IP {} is DOWN or not found. Response: {}".format(ip, device))
             
