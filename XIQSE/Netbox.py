@@ -199,17 +199,36 @@ class Netbox(object):
             self.ctx.log("Invalid device object provided.")
             return False
             
+        # Normalize status to handle common variations (Netbox expects specific lowercase slugs)
+        # Mapping common external statuses to Netbox valid choices
+        status_map = {
+            'online': 'active',
+            'up': 'active',
+            'offline': 'offline',
+            'down': 'offline',
+            'planned': 'planned',
+            'staged': 'staged',
+            'failed': 'failed',
+            'inventory': 'inventory',
+            'decommissioning': 'decommissioning'
+        }
+        
+        final_status = status_map.get(str(status).lower(), status)
+        
+        if final_status != status:
+             self.ctx.debug("Mapped status '{}' to Netbox valid status '{}'".format(status, final_status))
+
         device_id = device['id']
         try:
             api_url = "{}/api/dcim/devices/{}/".format(self.url, device_id)
-            payload = {'status': status}
+            payload = {'status': final_status}
             
-            self.ctx.debug("Updating device {} status to {}".format(device_id, status))
+            self.ctx.debug("Updating device {} status to {}".format(device_id, final_status))
             
             response = self.session.patch(api_url, json=payload)
             response.raise_for_status()
             
-            self.ctx.log("Successfully updated device {} status to {}".format(device.get('name', device_id), status))
+            self.ctx.log("Successfully updated device {} status to {}".format(device.get('name', device_id), final_status))
             return True
             
         except requests.exceptions.RequestException as e:
