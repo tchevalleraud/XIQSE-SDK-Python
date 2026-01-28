@@ -261,18 +261,25 @@ class GraphQL(object):
         Returns:
             bool: True if the device is available (down=False), False otherwise.
         """
+        self.ctx.debug("checkDevice: Checking IP {} (Retries: {}, Interval: {}s)".format(ip, retries, interval))
         for i in range(retries):
+            self.ctx.debug("checkDevice: Attempt {}/{} for IP {}".format(i+1, retries, ip))
             # We use returnKeyError=True to avoid aborting if the device is not found or query fails
             device = self.nbiQueryDict('checkDevice', IP=ip, returnKeyError=True)
             
             # Check if we got a valid response and the device is UP (down == False)
             if device and isinstance(device, dict) and device.get('down') is False:
+                self.ctx.debug("checkDevice: IP {} is UP".format(ip))
                 return True
+            
+            self.ctx.debug("checkDevice: IP {} is DOWN or not found. Response: {}".format(ip, device))
             
             # If not the last attempt, wait
             if i < retries - 1:
+                self.ctx.debug("checkDevice: Waiting {}s before next attempt...".format(interval))
                 time.sleep(interval)
                 
+        self.ctx.debug("checkDevice: IP {} is still DOWN after {} attempts".format(ip, retries))
         return False
 
     def test(self):
