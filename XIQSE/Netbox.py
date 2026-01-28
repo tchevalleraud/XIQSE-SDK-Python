@@ -237,6 +237,47 @@ class Netbox(object):
                 self.ctx.log("Response content: {}".format(e.response.text))
             return False
 
+    def getDeviceStatus(self, device):
+        """
+        Get the normalized status of a device.
+        
+        Args:
+            device (dict): The device dictionary returned by getDeviceBySerial.
+            
+        Returns:
+            str: One of 'online', 'offline', 'planned', 'inventory', 'decommissioning', or None if unavailable.
+        """
+        if not device:
+            return None
+        
+        status_field = device.get('status')
+        
+        # NetBox may return the status as a simple slug (e.g., 'active') or as an object with 'value'/'label'
+        if isinstance(status_field, dict):
+            netbox_slug = (
+                status_field.get('value') or
+                status_field.get('slug') or
+                status_field.get('name') or
+                (status_field.get('label') or '').lower()
+            )
+        else:
+            netbox_slug = str(status_field).lower() if status_field else None
+        
+        if not netbox_slug:
+            return None
+        
+        mapping = {
+            'active': 'online',
+            'offline': 'offline',
+            'planned': 'planned',
+            'inventory': 'inventory',
+            'decommissioning': 'decommissioning'
+        }
+        
+        normalized = mapping.get(netbox_slug, netbox_slug)
+        self.ctx.debug("Device status mapped '{}' -> '{}'".format(netbox_slug, normalized))
+        return normalized
+
     def getSiteRegionPath(self, device):
         """
         Get the full region path for the device's site.
