@@ -249,14 +249,14 @@ class GraphQL(object):
             queryString = queryString.replace('<'+key+'>', replaceValue)
         return queryString
     
-    def checkDevice(self, ip, retries=5, interval=2):
+    def checkDevice(self, ip, retries=5, interval=5):
         """
         Check if a device is up or down using the 'checkDevice' NBI query.
 
         Args:
             ip (str): The IP address of the device to check.
-            retries (int): Number of attempts. Defaults to 1.
-            interval (int): Time in seconds between attempts. Defaults to 2.
+            retries (int): Number of attempts. Defaults to 5.
+            interval (int): Time in seconds between attempts. Defaults to 5.
 
         Returns:
             bool: True if the device is available (down=False), False otherwise.
