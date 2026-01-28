@@ -2,6 +2,17 @@ from email import message
 
 
 NBI_Dict = {
+    'checkDevice': {
+        'json': '''
+            query {
+                network {
+                    device(ip: "<IP>"){
+                        down
+                    }
+                }
+            }
+        '''
+    },
     'configureDiscoveredDevice': {
         'json': '''
             mutation {
