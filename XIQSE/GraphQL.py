@@ -1,5 +1,6 @@
 import json
 import requests
+import time
 
 from java.util import LinkedHashMap
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -248,6 +249,32 @@ class GraphQL(object):
             queryString = queryString.replace('<'+key+'>', replaceValue)
         return queryString
     
+    def checkDevice(self, ip, retries=5, interval=2):
+        """
+        Check if a device is up or down using the 'checkDevice' NBI query.
+
+        Args:
+            ip (str): The IP address of the device to check.
+            retries (int): Number of attempts. Defaults to 1.
+            interval (int): Time in seconds between attempts. Defaults to 2.
+
+        Returns:
+            bool: True if the device is available (down=False), False otherwise.
+        """
+        for i in range(retries):
+            # We use returnKeyError=True to avoid aborting if the device is not found or query fails
+            device = self.nbiQueryDict('checkDevice', IP=ip, returnKeyError=True)
+            
+            # Check if we got a valid response and the device is UP (down == False)
+            if device and isinstance(device, dict) and device.get('down') is False:
+                return True
+            
+            # If not the last attempt, wait
+            if i < retries - 1:
+                time.sleep(interval)
+                
+        return False
+
     def test(self):
         """
         Test the GraphQL module.

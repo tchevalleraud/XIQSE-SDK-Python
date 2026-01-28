@@ -11,7 +11,8 @@ NBI_Dict = {
                     }
                 }
             }
-        '''
+        ''',
+        'key': 'device'
     },
     'configureDiscoveredDevice': {
         'json': '''
